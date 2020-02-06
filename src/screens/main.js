@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useSafeArea } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import BottomSheet from "reanimated-bottom-sheet";
@@ -9,11 +8,33 @@ import Backgrounds from "../components/backgrounds";
 import Followings from "../components/followings";
 import Decos from "../components/decos";
 
-const Main = ({ navigation }) => {
-  const inset = useSafeArea();
+const Main = () => {
   const canvasRef = useRef(null);
-  const [sheet, setSheet] = useState({ id: 1, snap: ["9"] });
-  const backgroundColor = useSelector(state => state.backgroundReducer);
+  const [sheet, setSheet] = useState({ id: 1, snap: ["25%"] });
+  const bgColor = useSelector(state => state.backgroundReducer);
+
+  const styles = StyleSheet.create({
+    canvas: {
+      height: 300,
+      alignItems: "center",
+      backgroundColor: bgColor
+    },
+    preview: {
+      alignItems: "flex-end"
+    },
+    bottomSheet: {
+      backgroundColor: "#543"
+    },
+    text1: {
+      fontSize: 16,
+      color: "#fff",
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    big: {
+      fontSize: 45
+    }
+  });
 
   const processPreview = async () => {
     captureRef(canvasRef, {
@@ -22,7 +43,7 @@ const Main = ({ navigation }) => {
     }).then(
       async uri => {
         if (Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(uri, { UTI: "Share Image on Instagram" });
+          await Sharing.shareAsync(uri);
         }
       },
       error => console.error("Oops, snapshot failed", error)
@@ -40,31 +61,39 @@ const Main = ({ navigation }) => {
         return <Backgrounds />;
     }
   };
+  const renderHeader = () => (
+    <TouchableOpacity onPress={processPreview} style={styles.preview}>
+      <Text>Share</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View
       style={{
-        paddingTop: inset.top,
         flex: 1,
-        backgroundColor: backgroundColor
+        backgroundColor: bgColor,
+        justifyContent: "center",
+        alignItems: "center"
       }}
     >
       <BottomSheet
         style={styles.snap}
         snapPoints={sheet.snap}
         renderContent={renderContent}
+        renderHeader={renderHeader}
+        enabledInnerScrolling={false}
       />
-
-      <TouchableOpacity onPress={processPreview}>
-        <Text>Preview</Text>
-      </TouchableOpacity>
       <View style={styles.canvas} ref={canvasRef}>
         <TouchableOpacity
-          onPress={() => setSheet({ ...sheet, id: 2, snap: ["20"] })}
+          onPress={() => setSheet({ ...sheet, id: 2, snap: ["40%"] })}
         >
-          <Text>Clip This</Text>
+          <Text style={styles.text1}>
+            THANK YOU{"\n"} <Text style={styles.big}>100</Text>
+            {"\n"} FOLLOWERS
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setSheet({ ...sheet, id: 3, snap: ["30"] })}
+          onPress={() => setSheet({ ...sheet, id: 3, snap: [30] })}
         >
           <Text>Deco</Text>
         </TouchableOpacity>
@@ -72,11 +101,5 @@ const Main = ({ navigation }) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  canvas: {
-    height: 300,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
+
 export default Main;
