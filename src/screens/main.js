@@ -4,9 +4,11 @@ import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import BottomSheet from "reanimated-bottom-sheet";
 import { useSelector } from "react-redux";
+import { useSafeArea } from "react-native-safe-area-context";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Backgrounds from "../components/backgrounds";
 import Followings from "../components/followings";
-import Decos from "../components/decos";
+
 var numbro = require("numbro");
 
 const niceFormat = number => {
@@ -14,7 +16,8 @@ const niceFormat = number => {
 };
 const Main = () => {
   const canvasRef = useRef(null);
-  const [sheet, setSheet] = useState({ id: 1, snap: ["25%"] });
+  const area = useSafeArea();
+  const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
   const app = useSelector(state => state.appReducer);
 
   const styles = StyleSheet.create({
@@ -39,6 +42,29 @@ const Main = () => {
     },
     big: {
       fontSize: 45
+    },
+    deco: {
+      position: "absolute",
+      right: 20,
+      top: area.top + 5
+    },
+    balloon: {
+      color: "#fff",
+      fontSize: 40
+    },
+    button: {
+      backgroundColor: "#fff",
+      marginRight: 20,
+      marginBottom: 10,
+      height: 35,
+      width: 60,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 10
+    },
+    sharing: {
+      fontWeight: "bold",
+      color: "#505050"
     }
   });
 
@@ -65,16 +91,16 @@ const Main = () => {
             onClose={() => setSheet({ ...sheet, id: 1, snap: ["25%"] })}
           />
         );
-      case 3:
-        return <Decos />;
       default:
         return <Backgrounds />;
     }
   };
   const renderHeader = () => (
-    <TouchableOpacity onPress={processPreview} style={styles.preview}>
-      <Text>Share</Text>
-    </TouchableOpacity>
+    <View style={styles.preview}>
+      <TouchableOpacity onPress={processPreview} style={styles.button}>
+        <Text style={styles.sharing}>Share</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -83,9 +109,15 @@ const Main = () => {
         flex: 1,
         backgroundColor: app.background,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        position: "relative",
+        paddingTop: area.top
       }}
     >
+      <TouchableOpacity style={styles.deco}>
+        <MaterialCommunityIcons name="balloon" style={styles.balloon} />
+      </TouchableOpacity>
+
       <BottomSheet
         style={styles.snap}
         snapPoints={sheet.snap}
@@ -102,11 +134,6 @@ const Main = () => {
             <Text style={styles.big}>{niceFormat(app.following)}</Text>
             {"\n"} FOLLOWERS
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setSheet({ ...sheet, id: 3, snap: [30] })}
-        >
-          <Text>Deco</Text>
         </TouchableOpacity>
       </View>
     </View>
