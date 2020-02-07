@@ -1,11 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { backgroundReducer } from "./reducers";
+import { appReducer } from "./reducers";
 
 const Store = createStore(
   combineReducers(
     {
-      backgroundReducer
+      appReducer
     },
     applyMiddleware(thunk)
   )

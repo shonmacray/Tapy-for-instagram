@@ -7,17 +7,23 @@ import { useSelector } from "react-redux";
 import Backgrounds from "../components/backgrounds";
 import Followings from "../components/followings";
 import Decos from "../components/decos";
+var numbro = require("numbro");
 
+const niceFormat = number => {
+  return numbro(number).format({ average: true });
+};
 const Main = () => {
   const canvasRef = useRef(null);
   const [sheet, setSheet] = useState({ id: 1, snap: ["25%"] });
-  const bgColor = useSelector(state => state.backgroundReducer);
+  const app = useSelector(state => state.appReducer);
 
   const styles = StyleSheet.create({
     canvas: {
       height: 300,
       alignItems: "center",
-      backgroundColor: bgColor
+      justifyContent: "center",
+      backgroundColor: app.background,
+      width: "100%"
     },
     preview: {
       alignItems: "flex-end"
@@ -54,7 +60,11 @@ const Main = () => {
       case 1:
         return <Backgrounds />;
       case 2:
-        return <Followings />;
+        return (
+          <Followings
+            onClose={() => setSheet({ ...sheet, id: 1, snap: ["25%"] })}
+          />
+        );
       case 3:
         return <Decos />;
       default:
@@ -71,7 +81,7 @@ const Main = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: bgColor,
+        backgroundColor: app.background,
         justifyContent: "center",
         alignItems: "center"
       }}
@@ -88,7 +98,8 @@ const Main = () => {
           onPress={() => setSheet({ ...sheet, id: 2, snap: ["40%"] })}
         >
           <Text style={styles.text1}>
-            THANK YOU{"\n"} <Text style={styles.big}>100</Text>
+            THANK YOU{"\n"}{" "}
+            <Text style={styles.big}>{niceFormat(app.following)}</Text>
             {"\n"} FOLLOWERS
           </Text>
         </TouchableOpacity>
