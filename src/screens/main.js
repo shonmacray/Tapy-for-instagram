@@ -1,13 +1,21 @@
 import React, { useRef, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image
+} from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import BottomSheet from "reanimated-bottom-sheet";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useSafeArea } from "react-native-safe-area-context";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import Backgrounds from "../components/backgrounds";
-import Followings from "../components/followings";
 
 var numbro = require("numbro");
 
@@ -18,7 +26,12 @@ const Main = () => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
+  const [visible, setVisible] = useState(true);
+  const [showActivity, setShowActivity] = useState(false);
+  const [following, setFollowing] = useState("");
+
   const app = useSelector(state => state.appReducer);
+  const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
     canvas: {
@@ -26,7 +39,8 @@ const Main = () => {
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: app.background,
-      width: "100%"
+      width: "100%",
+      position: "relative"
     },
     preview: {
       alignItems: "flex-end"
@@ -37,11 +51,12 @@ const Main = () => {
     text1: {
       fontSize: 16,
       color: "#fff",
-      fontWeight: "bold",
-      textAlign: "center"
+      fontWeight: "900"
     },
     big: {
-      fontSize: 45
+      fontSize: 45,
+      textAlign: "center",
+      color: "#fff"
     },
     deco: {
       position: "absolute",
@@ -52,19 +67,56 @@ const Main = () => {
       color: "#fff",
       fontSize: 40
     },
-    button: {
+    sharing: {
+      fontSize: 40,
+      color: "#fff"
+    },
+    sharingContainer: {
+      marginRight: 20
+    },
+    modal: {
+      paddingTop: area.top,
       backgroundColor: "#fff",
-      marginRight: 20,
-      marginBottom: 10,
-      height: 35,
-      width: 60,
+      flex: 1,
+      paddingHorizontal: 30
+    },
+    btn: {
+      backgroundColor: "#1D6EDB",
+      height: 45,
+      borderRadius: 10,
       justifyContent: "center",
       alignItems: "center",
-      borderRadius: 10
+      marginTop: 15
     },
-    sharing: {
+    update: {
       fontWeight: "bold",
+      color: "#fff"
+    },
+    input: {
+      fontSize: 18,
+      borderWidth: 1,
+      borderColor: "#505050",
+      height: 45,
+      borderRadius: 10,
+      paddingLeft: 15,
+      marginVertical: 15
+    },
+    follow: {
+      fontWeight: "bold",
+      color: "#505050",
+      fontSize: 15,
+      marginTop: 30
+    },
+    times: {
+      fontSize: 30,
       color: "#505050"
+    },
+    closeContainer: {
+      alignItems: "flex-end"
+    },
+    decos: {
+      position: "absolute",
+      bottom: 0
     }
   });
 
@@ -81,28 +133,32 @@ const Main = () => {
       error => console.error("Oops, snapshot failed", error)
     );
   };
-  const renderContent = () => {
-    switch (sheet.id) {
-      case 1:
-        return <Backgrounds />;
-      case 2:
-        return (
-          <Followings
-            onClose={() => setSheet({ ...sheet, id: 1, snap: ["25%"] })}
-          />
-        );
-      default:
-        return <Backgrounds />;
-    }
-  };
+  const renderContent = () => <Backgrounds />;
+
   const renderHeader = () => (
     <View style={styles.preview}>
-      <TouchableOpacity onPress={processPreview} style={styles.button}>
-        <Text style={styles.sharing}>Share</Text>
+      <TouchableOpacity
+        onPress={processPreview}
+        style={styles.sharingContainer}
+      >
+        <EvilIcons name="share-google" style={styles.sharing} />
       </TouchableOpacity>
     </View>
   );
 
+  const onUpdate = () => {
+    if (following.trim() !== "") {
+      dispatch({
+        type: "UPDATE_FOLLOWING",
+        payload: following
+      });
+      setShowActivity(true);
+      setTimeout(() => {
+        setVisible(false);
+        setShowActivity(false);
+      }, 1000);
+    }
+  };
   return (
     <View
       style={{
@@ -114,7 +170,7 @@ const Main = () => {
         paddingTop: area.top
       }}
     >
-      <TouchableOpacity style={styles.deco}>
+      <TouchableOpacity style={styles.deco} onPress={() => setVisible(true)}>
         <MaterialCommunityIcons name="balloon" style={styles.balloon} />
       </TouchableOpacity>
 
@@ -126,16 +182,39 @@ const Main = () => {
         enabledInnerScrolling={false}
       />
       <View style={styles.canvas} ref={canvasRef}>
-        <TouchableOpacity
-          onPress={() => setSheet({ ...sheet, id: 2, snap: ["40%"] })}
-        >
-          <Text style={styles.text1}>
-            THANK YOU{"\n"}{" "}
-            <Text style={styles.big}>{niceFormat(app.following)}</Text>
-            {"\n"} FOLLOWERS
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.magic}>
+          <Text style={styles.text1}>THANK YOU</Text>
+          <Text style={styles.big}>{niceFormat(app.following)}</Text>
+          <Text style={styles.text1}>FOLLOWERS</Text>
+        </View>
       </View>
+      <Modal visible={visible} transparent={false} animationType="slide">
+        <View style={styles.modal}>
+          <View style={styles.closeContainer}>
+            <TouchableOpacity onPress={() => setVisible(false)}>
+              <EvilIcons name="close" style={styles.times} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.follow}>Your following</Text>
+
+          <View>
+            <TextInput
+              placeholder="max 1000,000,000"
+              keyboardType="numeric"
+              style={styles.input}
+              onChangeText={text => setFollowing(text)}
+              value={following}
+            />
+
+            <TouchableOpacity style={styles.btn} onPress={onUpdate}>
+              <Text style={styles.update}>Set Following</Text>
+            </TouchableOpacity>
+          </View>
+          {showActivity ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : null}
+        </View>
+      </Modal>
     </View>
   );
 };
