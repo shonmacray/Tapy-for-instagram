@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import Motion from "./motion";
 
@@ -25,33 +25,48 @@ const Decos = ({ onClose }) => {
     17,
     18,
     19,
-    20
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
   ];
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        flex: 1,
-        position: "relative"
-      }}
-    >
-      {es.map(e => (
-        <TouchableOpacity
-          key={e}
-          onPress={() => {
-            dispatch({
-              type: "CHANG_DECO",
-              payload: e
-            });
-            onClose();
-          }}
-        >
-          <Motion e={e} />
-        </TouchableOpacity>
-      ))}
-    </View>
+    <ScrollView>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          flexWrap: "wrap"
+        }}
+      >
+        {es.map(e => (
+          <TouchableOpacity
+            key={e}
+            onPress={() => {
+              dispatch({
+                type: "CHANG_DECO",
+                payload: e
+              });
+              onClose();
+            }}
+          >
+            <Motion e={e} />
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 export default Decos;

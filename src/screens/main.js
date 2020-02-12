@@ -84,9 +84,7 @@ const Main = () => {
     modal2: {
       paddingTop: area.top,
       flex: 1,
-      paddingHorizontal: 30,
-      backgroundColor: "rgba(0,0,0, .87)",
-      position: "relative"
+      backgroundColor: "rgba(0,0,0, .87)"
     },
     btn: {
       backgroundColor: "#1D6EDB",
@@ -183,6 +181,17 @@ const Main = () => {
         paddingTop: area.top
       }}
     >
+      <Modal visible={deco} transparent={true} animationType="slide">
+        <View style={styles.modal2}>
+          <Decos onClose={() => setDeco(false)} />
+          <TouchableOpacity
+            onPress={() => setDeco(false)}
+            style={{ alignItems: "flex-end" }}
+          >
+            <EvilIcons name="close" style={styles.times2} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <TouchableOpacity style={styles.deco} onPress={() => setDeco(true)}>
         <MaterialCommunityIcons name="balloon" style={styles.balloon} />
       </TouchableOpacity>
@@ -227,17 +236,6 @@ const Main = () => {
           {showActivity ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : null}
-        </View>
-      </Modal>
-      <Modal visible={deco} transparent={true} animationType="slide">
-        <View style={styles.modal2}>
-          <Decos onClose={() => setDeco(false)} />
-          <TouchableOpacity
-            onPress={() => setDeco(false)}
-            style={{ alignItems: "flex-end" }}
-          >
-            <EvilIcons name="close" style={styles.times2} />
-          </TouchableOpacity>
         </View>
       </Modal>
     </View>
