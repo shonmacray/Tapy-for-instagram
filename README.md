@@ -2,6 +2,10 @@
 
 Creating Thank you messages for share it on instagram, Built with expo react native.
 
+## Stack
+
+react-native, expo, redux, hooks
+
 # How to run tapy
 
 Clone this project in your prefered directory.
