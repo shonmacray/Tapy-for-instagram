@@ -6,8 +6,7 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
-  ActivityIndicator,
-  Image
+  ActivityIndicator
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -196,7 +195,7 @@ const Main = () => {
         enabledInnerScrolling={false}
       />
       <View style={styles.canvas} ref={canvasRef}>
-        <Motion />
+        <Motion e={app.motion} />
         <TouchableOpacity style={styles.magic} onPress={() => setVisible(true)}>
           <Text style={styles.text1}>THANK YOU</Text>
           <Text style={styles.big}>{niceFormat(app.following)}</Text>
@@ -232,7 +231,7 @@ const Main = () => {
       </Modal>
       <Modal visible={deco} transparent={true} animationType="slide">
         <View style={styles.modal2}>
-          <Decos />
+          <Decos onClose={() => setDeco(false)} />
           <TouchableOpacity
             onPress={() => setDeco(false)}
             style={{ alignItems: "flex-end" }}

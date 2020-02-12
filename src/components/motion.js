@@ -1,6 +1,5 @@
 import React from "react";
-import { View, Image, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { Image } from "react-native";
 import e1 from "../assets/64/1.png";
 import e2 from "../assets/64/2.png";
 import e3 from "../assets/64/3.png";
@@ -22,9 +21,8 @@ import e18 from "../assets/64/18.png";
 import e19 from "../assets/64/19.png";
 import e20 from "../assets/64/20.png";
 
-const Motion = () => {
-  const { motion } = useSelector(state => state.appReducer);
-  switch (motion) {
+const Motion = ({ e }) => {
+  switch (e) {
     case 1:
       return <Image source={e1} />;
     case 2:

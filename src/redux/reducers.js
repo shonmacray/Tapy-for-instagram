@@ -10,6 +10,8 @@ export const appReducer = (state = appState, action) => {
       return { ...state, background: action.payload };
     case "UPDATE_FOLLOWING":
       return { ...state, following: action.payload };
+    case "CHANG_DECO":
+      return { ...state, motion: action.payload };
     default:
       return state;
   }
