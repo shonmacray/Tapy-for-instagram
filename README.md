@@ -1,6 +1,6 @@
 # Tapy for instagram
 
-Instagram post mobile app creating thanks to following on expo react native.
+Creating Thank you messages for share it on instagram, Built with expo react native.
 
 # How to run tapy
 
