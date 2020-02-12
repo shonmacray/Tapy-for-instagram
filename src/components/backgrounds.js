@@ -11,13 +11,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 const Backgrounds = () => {
   const dispatch = useDispatch();
   const [backs] = useState([
-    { name: "1", code: "#FFB900" },
+    { name: "1", code: "#FFAB00" },
     { name: "2", code: "#0078D7" },
-    { name: "3", code: "#00CC6A" },
-    { name: "4", code: "#8764B8" },
-    { name: "5", code: "#e4405f" },
-    { name: "6", code: "#34465d" },
-    { name: "7", code: "#da552f" },
+    { name: "3", code: "#66BB6A" },
+    { name: "4", code: "#673AB7" },
+    { name: "5", code: "#F06292" },
+    { name: "6", code: "#e53935" },
+    { name: "7", code: "#34495e" },
     { name: "8", code: "#131418" }
   ]);
   return (

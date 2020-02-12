@@ -16,9 +16,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSafeArea } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import Backgrounds from "../components/backgrounds";
+import Decos from "../components/decos";
+import Motion from "../components/motion";
 
-var numbro = require("numbro");
-
+const numbro = require("numbro");
 const niceFormat = number => {
   return numbro(number).format({ average: true });
 };
@@ -27,6 +28,7 @@ const Main = () => {
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
   const [visible, setVisible] = useState(true);
+  const [deco, setDeco] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [following, setFollowing] = useState("");
 
@@ -80,6 +82,13 @@ const Main = () => {
       flex: 1,
       paddingHorizontal: 30
     },
+    modal2: {
+      paddingTop: area.top,
+      flex: 1,
+      paddingHorizontal: 30,
+      backgroundColor: "rgba(0,0,0, .87)",
+      position: "relative"
+    },
     btn: {
       backgroundColor: "#1D6EDB",
       height: 45,
@@ -111,6 +120,11 @@ const Main = () => {
       fontSize: 30,
       color: "#505050"
     },
+    times2: {
+      fontSize: 30,
+      color: "#fff",
+      marginBottom: 30
+    },
     closeContainer: {
       alignItems: "flex-end"
     },
@@ -123,7 +137,7 @@ const Main = () => {
   const processPreview = async () => {
     captureRef(canvasRef, {
       format: "png",
-      quality: 0.8
+      quality: 1
     }).then(
       async uri => {
         if (Sharing.isAvailableAsync()) {
@@ -170,7 +184,7 @@ const Main = () => {
         paddingTop: area.top
       }}
     >
-      <TouchableOpacity style={styles.deco} onPress={() => setVisible(true)}>
+      <TouchableOpacity style={styles.deco} onPress={() => setDeco(true)}>
         <MaterialCommunityIcons name="balloon" style={styles.balloon} />
       </TouchableOpacity>
 
@@ -182,11 +196,12 @@ const Main = () => {
         enabledInnerScrolling={false}
       />
       <View style={styles.canvas} ref={canvasRef}>
-        <View style={styles.magic}>
+        <Motion />
+        <TouchableOpacity style={styles.magic} onPress={() => setVisible(true)}>
           <Text style={styles.text1}>THANK YOU</Text>
           <Text style={styles.big}>{niceFormat(app.following)}</Text>
           <Text style={styles.text1}>FOLLOWERS</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <Modal visible={visible} transparent={false} animationType="slide">
         <View style={styles.modal}>
@@ -213,6 +228,17 @@ const Main = () => {
           {showActivity ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : null}
+        </View>
+      </Modal>
+      <Modal visible={deco} transparent={true} animationType="slide">
+        <View style={styles.modal2}>
+          <Decos />
+          <TouchableOpacity
+            onPress={() => setDeco(false)}
+            style={{ alignItems: "flex-end" }}
+          >
+            <EvilIcons name="close" style={styles.times2} />
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>

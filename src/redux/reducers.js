@@ -1,6 +1,7 @@
 const appState = {
-  background: "#00CC6A",
-  following: "100"
+  background: "#0078D7",
+  following: "0",
+  motion: 6
 };
 
 export const appReducer = (state = appState, action) => {
