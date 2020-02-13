@@ -31,6 +31,10 @@ const Main = () => {
   const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
+  const [boxes, setBoxes] = useState([
+    { name: "Thanks", selected: true },
+    { name: "Status", selected: false }
+  ]);
   const [following, setFollowing] = useState("");
 
   const app = useSelector(state => state.appReducer);
@@ -153,12 +157,15 @@ const Main = () => {
       height: 100,
       borderRadius: 22,
       justifyContent: "center",
-      alignItems: "center",
+      alignItems: "center"
+    },
+    boxingSelected: {
       borderWidth: 2,
       borderColor: "#007CCA"
     },
     boxingContainer: {
-      marginVertical: 30
+      marginVertical: 30,
+      flexDirection: "row"
     },
     boxImage: {
       height: 35,
@@ -170,7 +177,17 @@ const Main = () => {
       fontSize: 16
     }
   });
-
+  const selectbox = () => {
+    boxes.map(box => {
+      if (box.selected === true) {
+        box.selected = false;
+        setBoxes([...boxes]);
+      } else {
+        box.selected = true;
+        setBoxes([...boxes]);
+      }
+    });
+  };
   const processPreview = async () => {
     captureRef(canvasRef, {
       format: "png",
@@ -260,10 +277,19 @@ const Main = () => {
               value={following}
             />
             <View style={styles.boxingContainer}>
-              <View style={styles.boxing}>
-                <Image source={e38} style={styles.boxImage} />
-                <Text style={styles.bthanks}>Thanks</Text>
-              </View>
+              {boxes.map((box, index) => (
+                <TouchableOpacity
+                  style={[
+                    styles.boxing,
+                    box.selected ? styles.boxingSelected : null
+                  ]}
+                  onPress={selectbox}
+                  key={box.name}
+                >
+                  <Image source={e38} style={styles.boxImage} />
+                  <Text style={styles.bthanks}>{box.name}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
             <TouchableOpacity style={styles.btn} onPress={onUpdate}>
               <Text style={styles.update}>Set</Text>
