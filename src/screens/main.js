@@ -19,6 +19,7 @@ import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
 import e38 from "../assets/64/38.png";
+import e9 from "../assets/64/9.png";
 
 const numbro = require("numbro");
 const niceFormat = number => {
@@ -32,8 +33,8 @@ const Main = () => {
   const [deco, setDeco] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [boxes, setBoxes] = useState([
-    { name: "Thanks", selected: true },
-    { name: "Status", selected: false }
+    { name: "Thanks", selected: true, emoji: e38 },
+    { name: "Status", selected: false, emoji: e9 }
   ]);
   const [following, setFollowing] = useState("");
 
@@ -286,7 +287,7 @@ const Main = () => {
                   onPress={selectbox}
                   key={box.name}
                 >
-                  <Image source={e38} style={styles.boxImage} />
+                  <Image source={box.emoji} style={styles.boxImage} />
                   <Text style={styles.bthanks}>{box.name}</Text>
                 </TouchableOpacity>
               ))}
