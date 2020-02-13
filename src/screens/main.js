@@ -7,7 +7,8 @@ import {
   Modal,
   TouchableOpacity,
   ActivityIndicator,
-  Image
+  Image,
+  Platform
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -20,6 +21,7 @@ import Decos from "../components/decos";
 import Motion from "../components/motion";
 import e38 from "../assets/64/38.png";
 import e9 from "../assets/64/9.png";
+import logo from "../../assets/part.png";
 
 const numbro = require("numbro");
 const niceFormat = number => {
@@ -58,6 +60,12 @@ const Main = () => {
       width: "100%",
       position: "relative"
     },
+    brandMark: {
+      position: "absolute",
+      bottom: 5,
+      right: 34,
+      alignItems: "center"
+    },
     preview: {
       alignItems: "flex-end"
     },
@@ -74,10 +82,15 @@ const Main = () => {
       textAlign: "center",
       color: "#fff"
     },
-    deco: {
+    heading: {
       position: "absolute",
-      right: 20,
-      top: area.top + 5
+      top: area.top,
+      width: "100%",
+      height: 50,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: 10
     },
     balloon: {
       color: "#fff",
@@ -91,13 +104,13 @@ const Main = () => {
       marginRight: 20
     },
     modal: {
-      paddingTop: area.top,
+      paddingTop: Platform.OS === "ios" ? area.top : 0,
       backgroundColor: "#fff",
       flex: 1,
       paddingHorizontal: 30
     },
     modal2: {
-      paddingTop: area.top,
+      paddingTop: Platform.OS === "ios" ? area.top : 0,
       flex: 1,
       backgroundColor: "rgba(0,0,0, .87)"
     },
@@ -176,6 +189,19 @@ const Main = () => {
     bthanks: {
       marginTop: 5,
       fontSize: 16
+    },
+    logo: {
+      resizeMode: "contain",
+      height: 20,
+      width: 20
+    },
+    brandName: {
+      fontSize: 11,
+      color: "#fff"
+    },
+    doing: {
+      fontSize: 24,
+      color: "#fff"
     }
   });
   const selectbox = () => {
@@ -241,9 +267,12 @@ const Main = () => {
           </TouchableOpacity>
         </View>
       </Modal>
-      <TouchableOpacity style={styles.deco} onPress={() => setDeco(true)}>
-        <MaterialCommunityIcons name="balloon" style={styles.balloon} />
-      </TouchableOpacity>
+      <View style={styles.heading}>
+        <Text style={styles.doing}>Thanks</Text>
+        <TouchableOpacity onPress={() => setDeco(true)}>
+          <MaterialCommunityIcons name="balloon" style={styles.balloon} />
+        </TouchableOpacity>
+      </View>
 
       <BottomSheet
         style={styles.snap}
@@ -259,6 +288,10 @@ const Main = () => {
           <Text style={styles.big}>{niceFormat(app.following)}</Text>
           <Text style={styles.text1}>FOLLOWERS</Text>
         </TouchableOpacity>
+        <View style={styles.brandMark}>
+          <Image source={logo} style={styles.logo} />
+          <Text style={styles.brandName}>TapyApp</Text>
+        </View>
       </View>
       <Modal visible={visible} transparent={false} animationType="slide">
         <View style={styles.modal}>
@@ -278,7 +311,7 @@ const Main = () => {
               value={following}
             />
             <View style={styles.boxingContainer}>
-              {boxes.map((box, index) => (
+              {boxes.map(box => (
                 <TouchableOpacity
                   style={[
                     styles.boxing,
