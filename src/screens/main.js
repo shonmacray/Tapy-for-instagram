@@ -6,7 +6,8 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -17,10 +18,11 @@ import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
+import e38 from "../assets/64/38.png";
 
 const numbro = require("numbro");
 const niceFormat = number => {
-  return numbro(number).format({ average: true });
+  return numbro(number).format({ thousandSeparated: true });
 };
 const Main = () => {
   const canvasRef = useRef(null);
@@ -35,6 +37,14 @@ const Main = () => {
   const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
+    main: {
+      flex: 1,
+      backgroundColor: app.background,
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
+      paddingTop: area.top
+    },
     canvas: {
       height: 300,
       alignItems: "center",
@@ -101,17 +111,18 @@ const Main = () => {
     input: {
       fontSize: 18,
       borderWidth: 1,
-      borderColor: "#505050",
+      borderBottomColor: "#CA8C00",
+      borderTopColor: "transparent",
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
       height: 45,
       borderRadius: 10,
-      paddingLeft: 15,
       marginVertical: 15
     },
     follow: {
       fontWeight: "bold",
       color: "#505050",
-      fontSize: 15,
-      marginTop: 30
+      fontSize: 24
     },
     times: {
       fontSize: 30,
@@ -123,11 +134,40 @@ const Main = () => {
       marginBottom: 30
     },
     closeContainer: {
-      alignItems: "flex-end"
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 30,
+      marginTop: 10
     },
     decos: {
       position: "absolute",
       bottom: 0
+    },
+    magic: {
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    boxing: {
+      width: 100,
+      height: 100,
+      borderRadius: 22,
+      justifyContent: "center",
+      alignItems: "center",
+      borderWidth: 2,
+      borderColor: "#007CCA"
+    },
+    boxingContainer: {
+      marginVertical: 30
+    },
+    boxImage: {
+      height: 35,
+      width: 35,
+      resizeMode: "contain"
+    },
+    bthanks: {
+      marginTop: 5,
+      fontSize: 16
     }
   });
 
@@ -171,16 +211,7 @@ const Main = () => {
     }
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: app.background,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "relative",
-        paddingTop: area.top
-      }}
-    >
+    <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
         <View style={styles.modal2}>
           <Decos onClose={() => setDeco(false)} />
@@ -214,23 +245,28 @@ const Main = () => {
       <Modal visible={visible} transparent={false} animationType="slide">
         <View style={styles.modal}>
           <View style={styles.closeContainer}>
+            <Text style={styles.follow}>Enter Following</Text>
             <TouchableOpacity onPress={() => setVisible(false)}>
               <EvilIcons name="close" style={styles.times} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.follow}>Your following</Text>
 
           <View>
             <TextInput
-              placeholder="max 1000,000,000"
+              placeholder="Current following"
               keyboardType="numeric"
               style={styles.input}
               onChangeText={text => setFollowing(text)}
               value={following}
             />
-
+            <View style={styles.boxingContainer}>
+              <View style={styles.boxing}>
+                <Image source={e38} style={styles.boxImage} />
+                <Text style={styles.bthanks}>Thanks</Text>
+              </View>
+            </View>
             <TouchableOpacity style={styles.btn} onPress={onUpdate}>
-              <Text style={styles.update}>Set Following</Text>
+              <Text style={styles.update}>Set</Text>
             </TouchableOpacity>
           </View>
           {showActivity ? (
