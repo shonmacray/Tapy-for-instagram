@@ -116,6 +116,6 @@ const Motion = ({ e }) => {
   }
 };
 const styles = StyleSheet.create({
-  image: { height: 50, width: 50, resizeMode: "contain" }
+  image: { height: 50, width: 50, resizeMode: "contain", marginBottom: 10 }
 });
 export default Motion;

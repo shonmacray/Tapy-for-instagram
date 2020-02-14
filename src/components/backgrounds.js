@@ -7,10 +7,12 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSafeArea } from "react-native-safe-area-context";
 
 const Backgrounds = () => {
   const dispatch = useDispatch();
-  const [backs] = useState([
+  const area = useSafeArea();
+  const [backgroundColors] = useState([
     { name: "1", code: "#FFAB00" },
     { name: "2", code: "#0078D7" },
     { name: "3", code: "#66BB6A" },
@@ -20,9 +22,31 @@ const Backgrounds = () => {
     { name: "7", code: "#34495e" },
     { name: "8", code: "#131418" }
   ]);
+
+  const styles = StyleSheet.create({
+    panel: {
+      height: 600,
+      padding: 20,
+      backgroundColor: "#ffffff",
+      margin: 3,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: (area.bottom*4)
+    },
+    Backgrounds: {
+      backgroundColor: "#ddd",
+      height: 30,
+      width: 30,
+      borderRadius: 30,
+      marginTop: 5
+    }
+  });
+  
   return (
     <View style={styles.panel}>
-      {backs.map(back =>
+      {backgroundColors.map(back =>
         Platform.OS === "ios" ? (
           <IosTouched
             key={back.name}
@@ -44,23 +68,5 @@ const Backgrounds = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  panel: {
-    height: 600,
-    padding: 20,
-    backgroundColor: "#ffffff",
-    margin: 3,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  Backgrounds: {
-    backgroundColor: "#ddd",
-    height: 30,
-    width: 30,
-    borderRadius: 30,
-    marginTop: 5
-  }
-});
+
 export default Backgrounds;
