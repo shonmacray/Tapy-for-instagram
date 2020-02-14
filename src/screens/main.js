@@ -34,10 +34,6 @@ const Main = () => {
   const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
-  const [boxes, setBoxes] = useState([
-    { name: "Thanks", selected: true, emoji: e38 },
-    { name: "Status", selected: false, emoji: e9 }
-  ]);
   const [following, setFollowing] = useState("");
 
   const app = useSelector(state => state.appReducer);
@@ -204,17 +200,6 @@ const Main = () => {
       color: "#fff"
     }
   });
-  const selectbox = () => {
-    boxes.map(box => {
-      if (box.selected === true) {
-        box.selected = false;
-        setBoxes([...boxes]);
-      } else {
-        box.selected = true;
-        setBoxes([...boxes]);
-      }
-    });
-  };
   const processPreview = async () => {
     captureRef(canvasRef, {
       format: "png",
@@ -311,17 +296,17 @@ const Main = () => {
               value={following}
             />
             <View style={styles.boxingContainer}>
-              {boxes.map(box => (
+              {app.plans.map(plan => (
                 <TouchableOpacity
                   style={[
                     styles.boxing,
-                    box.selected ? styles.boxingSelected : null
+                    plan.selected ? styles.boxingSelected : null
                   ]}
-                  onPress={selectbox}
-                  key={box.name}
+                  onPress={() => dispatch({ type: "SELECT_PLAN" })}
+                  key={plan.name}
                 >
-                  <Image source={box.emoji} style={styles.boxImage} />
-                  <Text style={styles.bthanks}>{box.name}</Text>
+                  <Image source={plan.emoji} style={styles.boxImage} />
+                  <Text style={styles.bthanks}>{plan.name}</Text>
                 </TouchableOpacity>
               ))}
             </View>
