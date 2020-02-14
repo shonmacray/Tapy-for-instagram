@@ -5,7 +5,8 @@ const appState = {
   plans: [
     { name: "Thanks", selected: true },
     { name: "Post", selected: false }
-  ]
+  ],
+  plan: "Thanks"
 };
 
 export const appReducer = (state = appState, action) => {
@@ -20,9 +21,11 @@ export const appReducer = (state = appState, action) => {
       let newState = { ...state };
       newState.plans.map(plan => {
         if (plan.selected === true) {
+          newState.plan = "Thanks";
           plan.selected = false;
           return { ...plan };
         } else {
+          newState.plan = "Post";
           plan.selected = true;
           return { ...plan };
         }

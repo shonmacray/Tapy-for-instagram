@@ -27,11 +27,9 @@ const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
-  const [visible, setVisible] = useState(false);
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
-  const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
     main: {

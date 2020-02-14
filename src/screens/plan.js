@@ -10,6 +10,7 @@ import {
 import { useSafeArea } from "react-native-safe-area-context";
 import { EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
+import Write from "../components/write";
 
 const Plan = ({ navigation }) => {
   const inset = useSafeArea();
@@ -35,20 +36,29 @@ const Plan = ({ navigation }) => {
   return (
     <View style={[styles.modal, { paddingTop: inset.top }]}>
       <View style={styles.closeContainer}>
-        <Text style={styles.follow}>Enter Following</Text>
+        <Text style={styles.follow}>
+          {app.plan === "Thanks" ? "Enter Following" : "Post"}
+        </Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <EvilIcons name="close" style={styles.times} />
         </TouchableOpacity>
       </View>
 
       <View>
-        <TextInput
-          placeholder="Current following"
-          keyboardType="numeric"
-          style={styles.input}
-          onChangeText={text => setFollowing(text)}
-          value={following}
-        />
+        <View>
+          {app.plan === "Thanks" ? (
+            <TextInput
+              placeholder="Current following"
+              keyboardType="numeric"
+              style={styles.input}
+              onChangeText={text => setFollowing(text)}
+              value={following}
+            />
+          ) : (
+            <Write />
+          )}
+        </View>
+
         <View style={styles.boxingContainer}>
           {app.plans.map(plan => (
             <TouchableOpacity
