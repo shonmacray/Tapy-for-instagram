@@ -4,7 +4,7 @@ const appState = {
   motion: 6,
   plans: [
     { name: "Thanks", selected: true },
-    { name: "Status", selected: false }
+    { name: "Post", selected: false }
   ]
 };
 

@@ -1,12 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Modal,
   TouchableOpacity,
-  ActivityIndicator,
   Image,
   Platform
 } from "react-native";
@@ -19,22 +17,18 @@ import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
-import e38 from "../assets/64/38.png";
-import e9 from "../assets/64/9.png";
 import logo from "../../assets/part.png";
 
 const numbro = require("numbro");
 const niceFormat = number => {
   return numbro(number).format({ thousandSeparated: true });
 };
-const Main = () => {
+const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [deco, setDeco] = useState(false);
-  const [showActivity, setShowActivity] = useState(false);
-  const [following, setFollowing] = useState("");
 
   const app = useSelector(state => state.appReducer);
   const dispatch = useDispatch();
@@ -99,60 +93,15 @@ const Main = () => {
     sharingContainer: {
       marginRight: 20
     },
-    modal: {
-      paddingTop: Platform.OS === "ios" ? area.top : 0,
-      backgroundColor: "#fff",
-      flex: 1,
-      paddingHorizontal: 30
-    },
     modal2: {
       paddingTop: Platform.OS === "ios" ? area.top : 0,
       flex: 1,
       backgroundColor: "rgba(0,0,0, .87)"
     },
-    btn: {
-      backgroundColor: "#1D6EDB",
-      height: 45,
-      borderRadius: 10,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 15
-    },
-    update: {
-      fontWeight: "bold",
-      color: "#fff"
-    },
-    input: {
-      fontSize: 18,
-      borderWidth: 1,
-      borderBottomColor: "#CA8C00",
-      borderTopColor: "transparent",
-      borderLeftColor: "transparent",
-      borderRightColor: "transparent",
-      height: 45,
-      borderRadius: 10,
-      marginVertical: 15
-    },
-    follow: {
-      fontWeight: "bold",
-      color: "#505050",
-      fontSize: 24
-    },
-    times: {
-      fontSize: 30,
-      color: "#505050"
-    },
     times2: {
       fontSize: 30,
       color: "#fff",
       marginBottom: 30
-    },
-    closeContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 30,
-      marginTop: 10
     },
     decos: {
       position: "absolute",
@@ -161,30 +110,6 @@ const Main = () => {
     magic: {
       justifyContent: "center",
       alignItems: "center"
-    },
-    boxing: {
-      width: 100,
-      height: 100,
-      borderRadius: 22,
-      justifyContent: "center",
-      alignItems: "center"
-    },
-    boxingSelected: {
-      borderWidth: 2,
-      borderColor: "#007CCA"
-    },
-    boxingContainer: {
-      marginVertical: 30,
-      flexDirection: "row"
-    },
-    boxImage: {
-      height: 35,
-      width: 35,
-      resizeMode: "contain"
-    },
-    bthanks: {
-      marginTop: 5,
-      fontSize: 16
     },
     logo: {
       resizeMode: "contain",
@@ -199,6 +124,9 @@ const Main = () => {
       fontSize: 24,
       color: "#fff"
     }
+  });
+  useEffect(() => {
+    navigation.navigate("plan");
   });
   const processPreview = async () => {
     captureRef(canvasRef, {
@@ -225,20 +153,6 @@ const Main = () => {
       </TouchableOpacity>
     </View>
   );
-
-  const onUpdate = () => {
-    if (following.trim() !== "") {
-      dispatch({
-        type: "UPDATE_FOLLOWING",
-        payload: following
-      });
-      setShowActivity(true);
-      setTimeout(() => {
-        setVisible(false);
-        setShowActivity(false);
-      }, 1000);
-    }
-  };
   return (
     <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
@@ -278,47 +192,6 @@ const Main = () => {
           <Text style={styles.brandName}>TapyApp</Text>
         </View>
       </View>
-      <Modal visible={visible} transparent={false} animationType="slide">
-        <View style={styles.modal}>
-          <View style={styles.closeContainer}>
-            <Text style={styles.follow}>Enter Following</Text>
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <EvilIcons name="close" style={styles.times} />
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <TextInput
-              placeholder="Current following"
-              keyboardType="numeric"
-              style={styles.input}
-              onChangeText={text => setFollowing(text)}
-              value={following}
-            />
-            <View style={styles.boxingContainer}>
-              {app.plans.map(plan => (
-                <TouchableOpacity
-                  style={[
-                    styles.boxing,
-                    plan.selected ? styles.boxingSelected : null
-                  ]}
-                  onPress={() => dispatch({ type: "SELECT_PLAN" })}
-                  key={plan.name}
-                >
-                  <Image source={plan.emoji} style={styles.boxImage} />
-                  <Text style={styles.bthanks}>{plan.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <TouchableOpacity style={styles.btn} onPress={onUpdate}>
-              <Text style={styles.update}>Set</Text>
-            </TouchableOpacity>
-          </View>
-          {showActivity ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : null}
-        </View>
-      </Modal>
     </View>
   );
 };
