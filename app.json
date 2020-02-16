@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Tapy for instagram",
-    "slug": "Tapy-for-instagram",
+    "name": "TapyApp",
+    "slug": "TapyApp",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],

@@ -121,11 +121,17 @@ const Main = ({ navigation }) => {
     doing: {
       fontSize: 24,
       color: "#fff"
+    },
+    post: {
+      textAlign: "center",
+      width: "80%",
+      fontSize: 30,
+      color: "#fff"
     }
   });
   useEffect(() => {
     navigation.navigate("plan");
-  });
+  }, []);
   const processPreview = async () => {
     captureRef(canvasRef, {
       format: "png",
@@ -179,12 +185,22 @@ const Main = ({ navigation }) => {
         enabledInnerScrolling={false}
       />
       <View style={styles.canvas} ref={canvasRef}>
-        <Motion e={app.motion} />
-        <TouchableOpacity style={styles.magic} onPress={() => setVisible(true)}>
-          <Text style={styles.text1}>THANK YOU</Text>
-          <Text style={styles.big}>{niceFormat(app.following)}</Text>
-          <Text style={styles.text1}>FOLLOWERS</Text>
-        </TouchableOpacity>
+        {app.plan === "Thanks" ? (
+          <View>
+            <Motion e={app.motion} />
+            <TouchableOpacity
+              style={styles.magic}
+              onPress={() => setVisible(true)}
+            >
+              <Text style={styles.text1}>THANK YOU</Text>
+              <Text style={styles.big}>{niceFormat(app.following)}</Text>
+              <Text style={styles.text1}>FOLLOWERS</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Text style={styles.post}>{app.post}</Text>
+        )}
+
         <View style={styles.brandMark}>
           <Image source={logo} style={styles.logo} />
           <Text style={styles.brandName}>TapyApp</Text>

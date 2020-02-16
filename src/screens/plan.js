@@ -5,32 +5,38 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ActivityIndicator
+  Image
 } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
-import { FontAwesome, EvilIcons } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import Write from "../components/write";
+import i1 from "../assets/64/1.png";
+import i2 from "../assets/64/5.png";
 
 const Plan = ({ navigation }) => {
   const inset = useSafeArea();
   const [following, setFollowing] = useState("");
-  const [showActivity, setShowActivity] = useState(false);
+  const [post, setPost] = useState("");
 
   const app = useSelector(state => state.appReducer);
   const dispatch = useDispatch();
 
   const onUpdate = () => {
-    if (following.trim() !== "") {
-      dispatch({
-        type: "UPDATE_FOLLOWING",
-        payload: following
-      });
-      setShowActivity(true);
-      setTimeout(() => {
+    // if (following.trim() !== "") {
+    //   dispatch({
+    //     type: "UPDATE_FOLLOWING",
+    //     payload: following
+    //   });
+    //   navigation.goBack();
+    // }
+    if (app.plan === "Thanks") {
+      alert("thanks");
+    } else {
+      if (post.trim() !== "") {
+        dispatch({ type: "SET_POST", payload: post.trim() });
         navigation.goBack();
-        setShowActivity(false);
-      }, 1000);
+      }
     }
   };
   return (
@@ -55,7 +61,7 @@ const Plan = ({ navigation }) => {
               value={following}
             />
           ) : (
-            <Write />
+            <Write onChangeText={text => setPost(text)} />
           )}
         </View>
 
@@ -69,7 +75,11 @@ const Plan = ({ navigation }) => {
               onPress={() => dispatch({ type: "SELECT_PLAN" })}
               key={plan.name}
             >
-              <FontAwesome name={plan.icon} style={styles.boxImage} />
+              {plan.name === "Thanks" ? (
+                <Image source={i1} style={styles.images} />
+              ) : (
+                <Image source={i2} style={styles.images} />
+              )}
               <Text style={styles.bthanks}>{plan.name}</Text>
             </TouchableOpacity>
           ))}
@@ -78,7 +88,6 @@ const Plan = ({ navigation }) => {
           <Text style={styles.update}>Set</Text>
         </TouchableOpacity>
       </View>
-      {showActivity ? <ActivityIndicator size="large" color="#0000ff" /> : null}
     </View>
   );
 };
@@ -148,6 +157,11 @@ const styles = StyleSheet.create({
   bthanks: {
     marginTop: 5,
     fontSize: 16
+  },
+  images: {
+    height: 30,
+    width: 30,
+    resizeMode: "contain"
   }
 });
 export default Plan;

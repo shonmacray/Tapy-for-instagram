@@ -1,7 +1,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
-const Write = () => {
+const Write = ({ onChangeText }) => {
   return (
     <View style={styles.writeContainer}>
       <TextInput
@@ -10,6 +10,7 @@ const Write = () => {
         multiline
         maxLength={100}
         style={styles.write}
+        onChangeText={text => onChangeText(text)}
       />
     </View>
   );

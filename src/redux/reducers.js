@@ -1,10 +1,11 @@
 const appState = {
   background: "#0078D7",
   following: "0",
+  post: "hello",
   motion: 6,
   plans: [
-    { name: "Thanks", selected: true, icon: "instagram" },
-    { name: "Post", selected: false, icon: "pencil-square-o" }
+    { name: "Thanks", selected: true },
+    { name: "Post", selected: false }
   ],
   plan: "Thanks"
 };
@@ -31,6 +32,8 @@ export const appReducer = (state = appState, action) => {
         }
       });
       return newState;
+    case "SET_POST":
+      return { ...state, post: action.payload };
     default:
       return state;
   }
