@@ -8,7 +8,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
-import { EvilIcons } from "@expo/vector-icons";
+import { FontAwesome, EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import Write from "../components/write";
 
@@ -37,7 +37,7 @@ const Plan = ({ navigation }) => {
     <View style={[styles.modal, { paddingTop: inset.top }]}>
       <View style={styles.closeContainer}>
         <Text style={styles.follow}>
-          {app.plan === "Thanks" ? "Enter Following" : "Post"}
+          {app.plan === "Thanks" ? "Instagram" : "Post"}
         </Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <EvilIcons name="close" style={styles.times} />
@@ -69,6 +69,7 @@ const Plan = ({ navigation }) => {
               onPress={() => dispatch({ type: "SELECT_PLAN" })}
               key={plan.name}
             >
+              <FontAwesome name={plan.icon} style={styles.boxImage} />
               <Text style={styles.bthanks}>{plan.name}</Text>
             </TouchableOpacity>
           ))}
@@ -107,8 +108,7 @@ const styles = StyleSheet.create({
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
     height: 45,
-    borderRadius: 10,
-    marginVertical: 15
+    borderRadius: 10
   },
   closeContainer: {
     flexDirection: "row",
@@ -142,9 +142,8 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   boxImage: {
-    height: 35,
-    width: 35,
-    resizeMode: "contain"
+    color: "#FFAB00",
+    fontSize: 20
   },
   bthanks: {
     marginTop: 5,

@@ -3,8 +3,8 @@ const appState = {
   following: "0",
   motion: 6,
   plans: [
-    { name: "Thanks", selected: true },
-    { name: "Post", selected: false }
+    { name: "Thanks", selected: true, icon: "instagram" },
+    { name: "Post", selected: false, icon: "pencil-square-o" }
   ],
   plan: "Thanks"
 };
