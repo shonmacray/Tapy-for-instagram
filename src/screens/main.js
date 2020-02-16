@@ -1,12 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Modal,
   TouchableOpacity,
-  ActivityIndicator,
   Image,
   Platform,
 } from "react-native";
@@ -21,28 +19,19 @@ import numbro from 'numbro';
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
-import e38 from "../assets/64/38.png";
-import e9 from "../assets/64/9.png";
 import logo from "../../assets/part.png";
 
 const niceFormat = number => {
   return numbro(number).format({ thousandSeparated: true });
 };
-const Main = () => {
+const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ['17%'] });
   const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
-  const [showActivity, setShowActivity] = useState(false);
-  const [boxes, setBoxes] = useState([
-    { name: "Thanks", selected: true, emoji: e38 },
-    { name: "Status", selected: false, emoji: e9 }
-  ]);
-  const [following, setFollowing] = useState("");
 
   const app = useSelector(state => state.appReducer);
-  const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
     main: {
@@ -104,60 +93,15 @@ const Main = () => {
     sharingContainer: {
       marginRight: 20
     },
-    modal: {
-      paddingTop: Platform.OS === "ios" ? area.top : 0,
-      backgroundColor: "#fff",
-      flex: 1,
-      paddingHorizontal: 30
-    },
     modal2: {
       paddingTop: Platform.OS === "ios" ? area.top : 0,
       flex: 1,
       backgroundColor: "rgba(0,0,0, .87)"
     },
-    btn: {
-      backgroundColor: "#1D6EDB",
-      height: 45,
-      borderRadius: 10,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 15
-    },
-    update: {
-      fontWeight: "bold",
-      color: "#fff"
-    },
-    input: {
-      fontSize: 18,
-      borderWidth: 1,
-      borderBottomColor: "#CA8C00",
-      borderTopColor: "transparent",
-      borderLeftColor: "transparent",
-      borderRightColor: "transparent",
-      height: 45,
-      borderRadius: 10,
-      marginVertical: 15
-    },
-    follow: {
-      fontWeight: "bold",
-      color: "#505050",
-      fontSize: 24
-    },
-    times: {
-      fontSize: 30,
-      color: "#505050"
-    },
     times2: {
       fontSize: 30,
       color: "#fff",
       marginBottom: 30
-    },
-    closeContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 30,
-      marginTop: 10
     },
     decos: {
       position: "absolute",
@@ -166,30 +110,6 @@ const Main = () => {
     magic: {
       justifyContent: "center",
       alignItems: "center"
-    },
-    boxing: {
-      width: 100,
-      height: 100,
-      borderRadius: 22,
-      justifyContent: "center",
-      alignItems: "center"
-    },
-    boxingSelected: {
-      borderWidth: 2,
-      borderColor: "#007CCA"
-    },
-    boxingContainer: {
-      marginVertical: 30,
-      flexDirection: "row"
-    },
-    boxImage: {
-      height: 35,
-      width: 35,
-      resizeMode: "contain"
-    },
-    bthanks: {
-      marginTop: 5,
-      fontSize: 16
     },
     logo: {
       resizeMode: "contain",
@@ -203,19 +123,17 @@ const Main = () => {
     doing: {
       fontSize: 24,
       color: "#fff"
+    },
+    post: {
+      textAlign: "center",
+      width: "80%",
+      fontSize: 30,
+      color: "#fff"
     }
   });
-  const selectbox = () => {
-    boxes.map(box => {
-      if (box.selected === true) {
-        box.selected = false;
-        setBoxes([...boxes]);
-      } else {
-        box.selected = true;
-        setBoxes([...boxes]);
-      }
-    });
-  };
+  useEffect(() => {
+    navigation.navigate("plan");
+  }, []);
   const processPreview = async () => {
     captureRef(canvasRef, {
       format: "png",
@@ -245,20 +163,6 @@ const Main = () => {
       </TouchableOpacity>
     </View>
   );
-
-  const onUpdate = () => {
-    if (following.trim() !== "") {
-      dispatch({
-        type: "UPDATE_FOLLOWING",
-        payload: following
-      });
-      // setShowActivity(true);
-      // setTimeout(() => {
-        setVisible(false);
-      //   setShowActivity(false);
-      // }, 1000);
-    }
-  };
   return (
     <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
@@ -279,65 +183,29 @@ const Main = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.canvas} ref={canvasRef}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => setDeco(true)}>
-          <Motion e={app.motion} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.magic} onPress={() => setVisible(true)}>
-          <Text style={styles.text1}>THANK YOU</Text>
-          <Text style={styles.big}>{niceFormat(app.following)}</Text>
-          <Text style={styles.text1}>FOLLOWERS</Text>
-        </TouchableOpacity>
+        {app.plan === "Thanks" ? (
+          <View>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setDeco(true)}>
+              <Motion e={app.motion} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.magic}
+              onPress={() => setVisible(true)}
+            >
+              <Text style={styles.text1}>THANK YOU</Text>
+              <Text style={styles.big}>{niceFormat(app.following)}</Text>
+              <Text style={styles.text1}>FOLLOWERS</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Text style={styles.post}>{app.post}</Text>
+        )}
+
         <View style={styles.brandMark}>
           <Image source={logo} style={styles.logo} />
           <Text style={styles.brandName}>TapyApp</Text>
         </View>
       </View>
-      <Modal visible={visible} transparent={false} animationType="slide">
-        <View style={styles.modal}>
-          <View style={styles.closeContainer}>
-            <Text style={styles.follow}>Enter Following</Text>
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <EvilIcons name="close" style={styles.times} />
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <TextInput
-              placeholder="Current following"
-              keyboardType="numeric"
-              style={styles.input}
-              onChangeText={text => {
-                if(/^[0-9.,]+$/.test(text)){
-                  // allow only numbers, comma and dot to prevent text paste
-                  setFollowing(niceFormat(text))
-                }
-              }}
-              value={following}
-            />
-            <View style={styles.boxingContainer}>
-              {boxes.map(box => (
-                <TouchableOpacity
-                  style={[
-                    styles.boxing,
-                    box.selected ? styles.boxingSelected : null
-                  ]}
-                  onPress={selectbox}
-                  key={box.name}
-                >
-                  <Image source={box.emoji} style={styles.boxImage} />
-                  <Text style={styles.bthanks}>{box.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <TouchableOpacity style={styles.btn} onPress={onUpdate}>
-              <Text style={styles.update}>Set</Text>
-            </TouchableOpacity>
-          </View>
-          {showActivity ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : null}
-        </View>
-      </Modal>
       <BottomSheet
         snapPoints={sheet.snap}
         renderContent={renderContent}
