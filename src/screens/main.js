@@ -78,7 +78,7 @@ const Main = ({ navigation }) => {
       width: "100%",
       height: 50,
       flexDirection: "row",
-      justifyContent: "space-between",
+      justifyContent: "flex-end",
       alignItems: "center",
       paddingHorizontal: 10
     },
@@ -177,7 +177,6 @@ const Main = ({ navigation }) => {
         </TouchableOpacity>
       </Modal>
       <View style={styles.heading}>
-        <Text style={styles.doing}>Thanks</Text>
         <TouchableOpacity onPress={() => setDeco(true)}>
           <MaterialCommunityIcons name="balloon" style={styles.balloon} />
         </TouchableOpacity>
