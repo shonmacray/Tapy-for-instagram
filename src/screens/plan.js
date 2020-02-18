@@ -5,12 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ScrollView,
 } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 import { EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import Write from "../components/write";
+import PlanBox from "../components/PlanBox";
 import i1 from "../assets/64/1.png";
 import i2 from "../assets/64/5.png";
 
@@ -21,6 +23,8 @@ const Plan = ({ navigation }) => {
 
   const app = useSelector(state => state.appReducer);
   const dispatch = useDispatch();
+
+  const selectedPlan = app.plans.find(plan => plan.selected === true);
 
   const onUpdate = () => {
     // if (following.trim() !== "") {
@@ -40,7 +44,7 @@ const Plan = ({ navigation }) => {
     }
   };
   return (
-    <View style={[styles.modal, { paddingTop: inset.top }]}>
+    <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>
       <View style={styles.closeContainer}>
         <Text style={styles.follow}>
           {app.plan === "Thanks" ? "Instagram" : "Post"}
@@ -52,7 +56,7 @@ const Plan = ({ navigation }) => {
 
       <View>
         <View>
-          {app.plan === "Thanks" ? (
+          {selectedPlan.name === "Thanks" ? (
             <TextInput
               placeholder="Current following"
               keyboardType="numeric"
@@ -67,28 +71,20 @@ const Plan = ({ navigation }) => {
 
         <View style={styles.boxingContainer}>
           {app.plans.map(plan => (
-            <TouchableOpacity
-              style={[
-                styles.boxing,
-                plan.selected ? styles.boxingSelected : null
-              ]}
-              onPress={() => dispatch({ type: "SELECT_PLAN" })}
+            <PlanBox 
               key={plan.name}
-            >
-              {plan.name === "Thanks" ? (
-                <Image source={i1} style={styles.images} />
-              ) : (
-                <Image source={i2} style={styles.images} />
-              )}
-              <Text style={styles.bthanks}>{plan.name}</Text>
-            </TouchableOpacity>
+              iconComponent={plan.name === 'Thanks' ? (<Image source={i1} style={styles.images} />) : (<Image source={i2} style={styles.images} />)}
+              text={plan.name} 
+              selected={selectedPlan.name === plan.name}
+              onPress={() => dispatch({ type: "SELECT_PLAN", payload: { plan } })}
+            />
           ))}
         </View>
         <TouchableOpacity style={styles.btn} onPress={onUpdate}>
           <Text style={styles.update}>Set</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

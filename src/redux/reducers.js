@@ -7,7 +7,6 @@ const appState = {
     { name: "Thanks", selected: true },
     { name: "Post", selected: false }
   ],
-  plan: "Thanks"
 };
 
 export const appReducer = (state = appState, action) => {
@@ -19,19 +18,15 @@ export const appReducer = (state = appState, action) => {
     case "CHANG_DECO":
       return { ...state, motion: action.payload };
     case "SELECT_PLAN":
-      let newState = { ...state };
-      newState.plans.map(plan => {
-        if (plan.selected === true) {
-          newState.plan = "Thanks";
-          plan.selected = false;
-          return { ...plan };
-        } else {
-          newState.plan = "Post";
+      const plans = state.plans.map(plan => {
+        if(action.payload.plan.name === plan.name) {
           plan.selected = true;
-          return { ...plan };
+        } else {
+          plan.selected = false;
         }
+        return plan
       });
-      return newState;
+      return {...state, plans}
     case "SET_POST":
       return { ...state, post: action.payload };
     default:

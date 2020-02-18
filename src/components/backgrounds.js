@@ -25,7 +25,7 @@ const Backgrounds = () => {
 
   const styles = StyleSheet.create({
     panel: {
-      height: 600,
+      height: 560,
       padding: 20,
       backgroundColor: "#ffffff",
       margin: 3,
@@ -33,7 +33,7 @@ const Backgrounds = () => {
       borderTopRightRadius: 20,
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: (area.bottom*4)
+      marginBottom: (area.bottom*5)
     },
     Backgrounds: {
       backgroundColor: "#ddd",
