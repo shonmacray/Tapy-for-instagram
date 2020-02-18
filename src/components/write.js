@@ -1,15 +1,16 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
-const Write = ({ onChangeText }) => {
+const Write = ({ onChangeText, value, placeholder, multiline }) => {
   return (
     <View style={styles.writeContainer}>
       <TextInput
-        placeholder="Whats on your mind?"
+        placeholder={placeholder}
         autoFocus
-        multiline
+        multiline={multiline}
         maxLength={100}
         style={styles.write}
+        value={value}
         onChangeText={text => onChangeText(text)}
       />
     </View>
@@ -18,9 +19,6 @@ const Write = ({ onChangeText }) => {
 const styles = StyleSheet.create({
   write: {
     fontSize: 20
-  },
-  writeContainer: {
-    marginBottom: 30
   }
 });
 export default Write;

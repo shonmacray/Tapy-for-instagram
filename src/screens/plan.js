@@ -12,7 +12,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import Write from "../components/write";
 import i1 from "../assets/64/1.png";
-import i2 from "../assets/64/5.png";
+import i2 from "../assets/64/41.png";
 
 const Plan = ({ navigation }) => {
   const inset = useSafeArea();
@@ -51,17 +51,26 @@ const Plan = ({ navigation }) => {
       </View>
 
       <View>
-        <View>
+        <View style={styles.inputContainer}>
           {app.plan === "Thanks" ? (
-            <TextInput
-              placeholder="Current following"
-              keyboardType="numeric"
-              style={styles.input}
+            // <TextInput
+            //   placeholder="Username"
+            //   style={styles.input}
+            //   onChangeText={text => setFollowing(text)}
+            //   value={following}
+            // />
+            <Write
               onChangeText={text => setFollowing(text)}
               value={following}
+              placeholder="Username"
             />
           ) : (
-            <Write onChangeText={text => setPost(text)} />
+            <Write
+              onChangeText={text => setPost(text)}
+              value={post}
+              placeholder="Whats on your mind?"
+              multiline={true}
+            />
           )}
         </View>
 
@@ -110,7 +119,7 @@ const styles = StyleSheet.create({
     color: "#fff"
   },
   input: {
-    fontSize: 18,
+    fontSize: 20,
     borderWidth: 1,
     borderBottomColor: "#CA8C00",
     borderTopColor: "transparent",
@@ -162,6 +171,9 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     resizeMode: "contain"
+  },
+  inputContainer: {
+    minHeight: 50
   }
 });
 export default Plan;
