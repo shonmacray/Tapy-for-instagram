@@ -6,7 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   Image,
-  Platform
+  Platform,
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -14,19 +14,21 @@ import BottomSheet from "reanimated-bottom-sheet";
 import { useSelector, useDispatch } from "react-redux";
 import { useSafeArea } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
+import numbro from 'numbro';
+
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
 import logo from "../../assets/part.png";
 
-const numbro = require("numbro");
 const niceFormat = number => {
   return numbro(number).format({ thousandSeparated: true });
 };
 const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
-  const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
+  const [sheet, setSheet] = useState({ id: 1, snap: ['17%'] });
+  const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
@@ -41,6 +43,7 @@ const Main = ({ navigation }) => {
       paddingTop: area.top
     },
     canvas: {
+      top: -50,
       height: 300,
       alignItems: "center",
       justifyContent: "center",
@@ -55,10 +58,9 @@ const Main = ({ navigation }) => {
       alignItems: "center"
     },
     preview: {
-      alignItems: "flex-end"
-    },
-    bottomSheet: {
-      backgroundColor: "#543"
+      flexDirection: 'row',
+      justifyContent: "flex-end",
+      bottom: 5,
     },
     text1: {
       fontSize: 16,
@@ -138,7 +140,9 @@ const Main = ({ navigation }) => {
       quality: 1
     }).then(
       async uri => {
-        if (Sharing.isAvailableAsync()) {
+        const canShare = await Sharing.isAvailableAsync();
+        console.log(canShare)
+        if (canShare) {
           await Sharing.shareAsync(uri);
         }
       },
@@ -153,14 +157,16 @@ const Main = ({ navigation }) => {
         onPress={processPreview}
         style={styles.sharingContainer}
       >
-        <EvilIcons name="share-google" style={styles.sharing} />
+        {
+          Platform.OS === 'android' ? <EvilIcons name="share-google" style={styles.sharing} /> : <EvilIcons name="share-apple" style={styles.sharing} />
+        }
       </TouchableOpacity>
     </View>
   );
   return (
     <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
-        <View style={styles.modal2}>
+        <TouchableOpacity style={styles.modal2} activeOpacity={1} onPress={() => setDeco(false)}>
           <Decos onClose={() => setDeco(false)} />
           <TouchableOpacity
             onPress={() => setDeco(false)}
@@ -168,25 +174,19 @@ const Main = ({ navigation }) => {
           >
             <EvilIcons name="close" style={styles.times2} />
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </Modal>
       <View style={styles.heading}>
         <TouchableOpacity onPress={() => setDeco(true)}>
           <MaterialCommunityIcons name="balloon" style={styles.balloon} />
         </TouchableOpacity>
       </View>
-
-      <BottomSheet
-        style={styles.snap}
-        snapPoints={sheet.snap}
-        renderContent={renderContent}
-        renderHeader={renderHeader}
-        enabledInnerScrolling={false}
-      />
       <View style={styles.canvas} ref={canvasRef}>
         {app.plan === "Thanks" ? (
           <View>
-            <Motion e={app.motion} />
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setDeco(true)}>
+              <Motion e={app.motion} />
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.magic}
               onPress={() => setVisible(true)}
@@ -205,6 +205,12 @@ const Main = ({ navigation }) => {
           <Text style={styles.brandName}>TapyApp</Text>
         </View>
       </View>
+      <BottomSheet
+        snapPoints={sheet.snap}
+        renderContent={renderContent}
+        renderHeader={renderHeader}
+        enabledInnerScrolling={false}
+      />
     </View>
   );
 };
