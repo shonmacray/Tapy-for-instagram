@@ -47,7 +47,7 @@ const Plan = ({ navigation }) => {
     <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>
       <View style={styles.closeContainer}>
         <Text style={styles.follow}>
-          {app.plan === "Thanks" ? "Instagram" : "Post"}
+          {selectedPlan.name === "Thanks" ? "Instagram" : "Post"}
         </Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <EvilIcons name="close" style={styles.times} />
@@ -56,11 +56,14 @@ const Plan = ({ navigation }) => {
 
       <View>
         <View style={styles.inputContainer}>
-          {app.plan === "Thanks" ? (
+          {selectedPlan.name === "Thanks" ? (
             <Write
               onChangeText={text => setFollowing(text)}
               value={following}
               placeholder="Username"
+              textBefore="@"
+              autoCapitalize="none"
+              autoCorrect={false}
             />
           ) : (
             <Write
