@@ -13,13 +13,13 @@ const Backgrounds = () => {
   const dispatch = useDispatch();
   const area = useSafeArea();
   const [backgroundColors] = useState([
-    { name: "1", code: "#FFAB00" },
+    { name: "1", code: "#FF8C00" },
     { name: "2", code: "#0078D7" },
     { name: "3", code: "#66BB6A" },
-    { name: "4", code: "#673AB7" },
+    { name: "4", code: "#8764B8" },
     { name: "5", code: "#F06292" },
-    { name: "6", code: "#e53935" },
-    { name: "7", code: "#34495e" },
+    { name: "6", code: "#E74856" },
+    { name: "7", code: "#68768A" },
     { name: "8", code: "#131418" }
   ]);
 
@@ -33,7 +33,7 @@ const Backgrounds = () => {
       borderTopRightRadius: 20,
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: (area.bottom*5)
+      marginBottom: area.bottom * 5
     },
     Backgrounds: {
       backgroundColor: "#ddd",
@@ -43,7 +43,7 @@ const Backgrounds = () => {
       marginTop: 5
     }
   });
-  
+
   return (
     <View style={styles.panel}>
       {backgroundColors.map(back =>

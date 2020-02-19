@@ -28,7 +28,6 @@ const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
   const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
-  const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
@@ -200,7 +199,7 @@ const Main = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.magic}
-              onPress={() => setVisible(true)}
+              onPress={() => navigation.navigate("plan")}
             >
               <Text style={styles.text1}>THANK YOU</Text>
               <Text style={styles.big}>{niceFormat(app.following)}</Text>
