@@ -6,7 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   Image,
-  Platform,
+  Platform
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -14,7 +14,7 @@ import BottomSheet from "reanimated-bottom-sheet";
 import { useSelector, useDispatch } from "react-redux";
 import { useSafeArea } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
-import numbro from 'numbro';
+import numbro from "numbro";
 
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
@@ -27,11 +27,12 @@ const niceFormat = number => {
 const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
-  const [sheet, setSheet] = useState({ id: 1, snap: ['17%'] });
+  const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
   const [visible, setVisible] = useState(true);
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
+  const selectedPlan = app.plans.find(plan => plan.selected === true);
 
   const styles = StyleSheet.create({
     main: {
@@ -58,9 +59,9 @@ const Main = ({ navigation }) => {
       alignItems: "center"
     },
     preview: {
-      flexDirection: 'row',
+      flexDirection: "row",
       justifyContent: "flex-end",
-      bottom: 5,
+      bottom: 5
     },
     text1: {
       fontSize: 16,
@@ -129,6 +130,10 @@ const Main = ({ navigation }) => {
       width: "80%",
       fontSize: 30,
       color: "#fff"
+    },
+    thanks: {
+      justifyContent: "center",
+      alignItems: "center"
     }
   });
   useEffect(() => {
@@ -141,7 +146,7 @@ const Main = ({ navigation }) => {
     }).then(
       async uri => {
         const canShare = await Sharing.isAvailableAsync();
-        console.log(canShare)
+        console.log(canShare);
         if (canShare) {
           await Sharing.shareAsync(uri);
         }
@@ -157,16 +162,22 @@ const Main = ({ navigation }) => {
         onPress={processPreview}
         style={styles.sharingContainer}
       >
-        {
-          Platform.OS === 'android' ? <EvilIcons name="share-google" style={styles.sharing} /> : <EvilIcons name="share-apple" style={styles.sharing} />
-        }
+        {Platform.OS === "android" ? (
+          <EvilIcons name="share-google" style={styles.sharing} />
+        ) : (
+          <EvilIcons name="share-apple" style={styles.sharing} />
+        )}
       </TouchableOpacity>
     </View>
   );
   return (
     <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
-        <TouchableOpacity style={styles.modal2} activeOpacity={1} onPress={() => setDeco(false)}>
+        <TouchableOpacity
+          style={styles.modal2}
+          activeOpacity={1}
+          onPress={() => setDeco(false)}
+        >
           <Decos onClose={() => setDeco(false)} />
           <TouchableOpacity
             onPress={() => setDeco(false)}
@@ -182,8 +193,8 @@ const Main = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.canvas} ref={canvasRef}>
-        {app.plan === "Thanks" ? (
-          <View>
+        {selectedPlan.name === "Thanks" ? (
+          <View style={styles.thanks}>
             <TouchableOpacity activeOpacity={0.8} onPress={() => setDeco(true)}>
               <Motion e={app.motion} />
             </TouchableOpacity>
