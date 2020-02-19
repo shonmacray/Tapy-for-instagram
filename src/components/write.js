@@ -8,6 +8,30 @@ import {
 } from "react-native";
 
 const Write = ({ textBefore, onPress, ...rest }) => {
+  const styles = StyleSheet.create({
+    writeContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
+    write: {
+      fontSize: 20,
+      width: textBefore ? "80%" : "100%"
+    },
+    btn: {
+      backgroundColor: "#131418",
+      width: 40,
+      height: 30,
+      alignSelf: "flex-end",
+      borderRadius: 50,
+      justifyContent: "center"
+    },
+    btnText: {
+      color: "#fff",
+      fontWeight: "bold",
+      alignSelf: "center"
+    }
+  });
   return (
     <View style={styles.writeContainer}>
       {textBefore ? (
@@ -24,28 +48,5 @@ const Write = ({ textBefore, onPress, ...rest }) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  writeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
-  },
-  write: {
-    fontSize: 20,
-    width: "80%"
-  },
-  btn: {
-    backgroundColor: "#131418",
-    width: 40,
-    height: 30,
-    alignSelf: "flex-end",
-    borderRadius: 50,
-    justifyContent: "center"
-  },
-  btnText: {
-    color: "#fff",
-    fontWeight: "bold",
-    alignSelf: "center"
-  }
-});
+
 export default Write;

@@ -16,6 +16,7 @@ import PlanBox from "../components/PlanBox";
 import i1 from "../assets/64/1.png";
 import i2 from "../assets/64/41.png";
 import numbro from "numbro";
+import Container from "../components/container";
 
 const niceFormat = number => {
   return numbro(number).format({ thousandSeparated: true });
@@ -96,78 +97,77 @@ const Plan = ({ navigation }) => {
   }, []);
   return (
     <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>
-      <View style={styles.closeContainer}>
-        <Text style={styles.follow}>
-          {selectedPlan.name === "Thanks" ? (
-            <Text>
-              Instagram <Text style={styles.username}>{user.username}</Text>
-            </Text>
-          ) : (
-            "Post"
-          )}
-        </Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <EvilIcons name="close" style={styles.times} />
-        </TouchableOpacity>
-      </View>
-
-      <View>
-        <View style={styles.inputContainer}>
-          {selectedPlan.name === "Thanks" ? (
-            user.isReg ? (
-              <Text style={styles.followers}>{niceFormat(user.count)}</Text>
+      <Container>
+        <View style={styles.closeContainer}>
+          <Text style={styles.follow}>
+            {selectedPlan.name === "Thanks" ? (
+              <Text>
+                Instagram <Text style={styles.username}>{user.username}</Text>
+              </Text>
+            ) : (
+              "Post"
+            )}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <EvilIcons name="close" style={styles.times} />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <View style={styles.inputContainer}>
+            {selectedPlan.name === "Thanks" ? (
+              user.isReg ? (
+                <Text style={styles.followers}>{niceFormat(user.count)}</Text>
+              ) : (
+                <Write
+                  onChangeText={text => setFollowing(text)}
+                  value={following}
+                  placeholder="Username"
+                  textBefore="@"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onPress={getFollowing}
+                />
+              )
             ) : (
               <Write
-                onChangeText={text => setFollowing(text)}
-                value={following}
-                placeholder="Username"
-                textBefore="@"
-                autoCapitalize="none"
-                autoCorrect={false}
-                onPress={getFollowing}
+                onChangeText={text => setPost(text)}
+                value={post}
+                placeholder="Whats on your mind?"
+                multiline={true}
               />
-            )
-          ) : (
-            <Write
-              onChangeText={text => setPost(text)}
-              value={post}
-              placeholder="Whats on your mind?"
-              multiline={true}
-            />
-          )}
-        </View>
+            )}
+          </View>
 
-        <View style={styles.boxingContainer}>
-          {app.plans.map(plan => (
-            <PlanBox
-              key={plan.name}
-              iconComponent={
-                plan.name === "Thanks" ? (
-                  <Image source={i1} style={styles.images} />
-                ) : (
-                  <Image source={i2} style={styles.images} />
-                )
-              }
-              text={plan.name}
-              selected={selectedPlan.name === plan.name}
-              onPress={() =>
-                dispatch({ type: "SELECT_PLAN", payload: { plan } })
-              }
-            />
-          ))}
+          <View style={styles.boxingContainer}>
+            {app.plans.map(plan => (
+              <PlanBox
+                key={plan.name}
+                iconComponent={
+                  plan.name === "Thanks" ? (
+                    <Image source={i1} style={styles.images} />
+                  ) : (
+                    <Image source={i2} style={styles.images} />
+                  )
+                }
+                text={plan.name}
+                selected={selectedPlan.name === plan.name}
+                onPress={() =>
+                  dispatch({ type: "SELECT_PLAN", payload: { plan } })
+                }
+              />
+            ))}
+          </View>
+          <TouchableOpacity style={styles.btn} onPress={onUpdate}>
+            <Text style={styles.update}>Set</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btn} onPress={onUpdate}>
-          <Text style={styles.update}>Set</Text>
-        </TouchableOpacity>
-      </View>
+      </Container>
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   modal: {
-    backgroundColor: "#fff",
-    flex: 1,
-    paddingHorizontal: 30
+    backgroundColor: "#fff"
   },
   btn: {
     backgroundColor: "#1D6EDB",
