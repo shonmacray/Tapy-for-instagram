@@ -33,3 +33,16 @@ export const appReducer = (state = appState, action) => {
       return state;
   }
 };
+
+const userState = {
+  username: "paypal"
+};
+
+export const userReducer = (state = userState, action) => {
+  switch (action.type) {
+    case "SAVE_USERNAME":
+      return state;
+    default:
+      return state;
+  }
+};

@@ -5,11 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ScrollView,
-  AsyncStorage
+  ScrollView
 } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
-import { EvilIcons } from "@expo/vector-icons";
+import { EvilIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import Write from "../components/write";
 import PlanBox from "../components/PlanBox";
@@ -59,19 +58,15 @@ const Plan = ({ navigation }) => {
           }
           return response.json();
         })
-        .then(async response => {
-          try {
-            await AsyncStorage.setItem(
-              "@user",
-              JSON.stringify({
-                username: response.graphql.user.username,
-                followingCount: response.graphql.user.edge_followed_by.count
-              })
-            );
-            alert("yes");
-          } catch (error) {
-            // Error saving data
-          }
+        .then(response => {
+          const { graphql } = response;
+
+          setUser({
+            ...user,
+            isReg: true,
+            count: graphql.user.edge_followed_by.count,
+            username: graphql.user.username
+          });
         })
         .catch(e => {
           console.log(e);
@@ -79,35 +74,26 @@ const Plan = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const results = await AsyncStorage.getItem("@user");
-        if (results !== null) {
-          const data = JSON.parse(results);
-          await setUser({
-            ...user,
-            isReg: true,
-            count: data.followingCount,
-            username: data.username
-          });
-        }
-      } catch {}
-    };
-    getData();
+    // setUser({
+    //   ...user,
+    //   isReg: true,
+    //   count: data.followingCount,
+    //   username: data.username
+    // });
   }, []);
+  const clearLocalStore = () => {
+    setUser({ ...user, isReg: false, count: "", username: "" });
+  };
   return (
     <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>
       <Container>
         <View style={styles.closeContainer}>
-          <Text style={styles.follow}>
-            {selectedPlan.name === "Thanks" ? (
-              <Text>
-                Instagram <Text style={styles.username}>{user.username}</Text>
-              </Text>
-            ) : (
-              "Post"
-            )}
-          </Text>
+          <View style={styles.follow}>
+            <Text style={styles.insta}>Instagram</Text>
+            {user.isReg ? (
+              <Text style={styles.username}>{user.username}</Text>
+            ) : null}
+          </View>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <EvilIcons name="close" style={styles.times} />
           </TouchableOpacity>
@@ -116,7 +102,12 @@ const Plan = ({ navigation }) => {
           <View style={styles.inputContainer}>
             {selectedPlan.name === "Thanks" ? (
               user.isReg ? (
-                <Text style={styles.followers}>{niceFormat(user.count)}</Text>
+                <View style={styles.followerContainer}>
+                  <Text style={styles.followers}>{niceFormat(user.count)}</Text>
+                  <TouchableOpacity onPress={clearLocalStore}>
+                    <SimpleLineIcons name="reload" style={styles.icons} />
+                  </TouchableOpacity>
+                </View>
               ) : (
                 <Write
                   onChangeText={text => setFollowing(text)}
@@ -201,7 +192,10 @@ const styles = StyleSheet.create({
   follow: {
     fontWeight: "bold",
     color: "#505050",
-    fontSize: 24
+    fontSize: 24,
+    flexDirection: "row",
+    justifyContent: "center",
+    overflow: "hidden"
   },
   times: {
     fontSize: 30,
@@ -242,8 +236,26 @@ const styles = StyleSheet.create({
     fontSize: 35
   },
   username: {
-    fontSize: 16,
-    fontWeight: "normal"
+    fontSize: 20,
+    fontWeight: "normal",
+    backgroundColor: "#8764B8",
+    color: "#fff",
+    marginLeft: 20,
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 5
+  },
+  followerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  icons: {
+    fontSize: 20,
+    color: "#131418"
+  },
+  insta: {
+    fontSize: 20
   }
 });
 export default Plan;
