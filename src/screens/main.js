@@ -11,21 +11,21 @@ import {
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import BottomSheet from "reanimated-bottom-sheet";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useSafeArea } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, EvilIcons } from "@expo/vector-icons";
-import numbro from "numbro";
 
 import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
 import logo from "../../assets/part.png";
 import { niceFormat } from "../functions";
+import Container from "../components/container";
 
 const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
-  const [sheet, setSheet] = useState({ id: 1, snap: ["17%"] });
+  const [sheet, setSheet] = useState({ id: 1, snap: ["8%", "17%"] });
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
@@ -43,8 +43,6 @@ const Main = ({ navigation }) => {
     canvas: {
       top: -50,
       height: 300,
-      alignItems: "center",
-      justifyContent: "center",
       backgroundColor: app.background,
       width: "100%",
       position: "relative"
@@ -52,12 +50,12 @@ const Main = ({ navigation }) => {
     brandMark: {
       position: "absolute",
       bottom: 5,
-      right: 34,
+      right: 20,
       alignItems: "center"
     },
     preview: {
       flexDirection: "row",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
       bottom: 5
     },
     text1: {
@@ -70,26 +68,9 @@ const Main = ({ navigation }) => {
       textAlign: "center",
       color: "#fff"
     },
-    heading: {
-      position: "absolute",
-      top: area.top,
-      width: "100%",
-      height: 50,
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      alignItems: "center",
-      paddingHorizontal: 10
-    },
-    balloon: {
+    headerIcons: {
       color: "#fff",
       fontSize: 40
-    },
-    sharing: {
-      fontSize: 40,
-      color: "#fff"
-    },
-    sharingContainer: {
-      marginRight: 20
     },
     modal2: {
       paddingTop: Platform.OS === "ios" ? area.top : 0,
@@ -123,10 +104,9 @@ const Main = ({ navigation }) => {
       color: "#fff"
     },
     post: {
-      textAlign: "center",
-      width: "80%",
       fontSize: 30,
-      color: "#fff"
+      color: "#fff",
+      textAlign: "center"
     },
     thanks: {
       justifyContent: "center",
@@ -154,18 +134,27 @@ const Main = ({ navigation }) => {
   const renderContent = () => <Backgrounds />;
 
   const renderHeader = () => (
-    <View style={styles.preview}>
-      <TouchableOpacity
-        onPress={processPreview}
-        style={styles.sharingContainer}
-      >
-        {Platform.OS === "android" ? (
-          <EvilIcons name="share-google" style={styles.sharing} />
-        ) : (
-          <EvilIcons name="share-apple" style={styles.sharing} />
-        )}
-      </TouchableOpacity>
-    </View>
+    <Container>
+      <View style={styles.preview}>
+        <TouchableOpacity onPress={() => setDeco(true)}>
+          <MaterialCommunityIcons
+            name="sticker-emoji"
+            style={styles.headerIcons}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={processPreview}>
+          {Platform.OS === "android" ? (
+            <MaterialCommunityIcons
+              name="share-outline"
+              style={styles.headerIcons}
+            />
+          ) : (
+            <EvilIcons name="share-apple" style={styles.headerIcons} />
+          )}
+        </TouchableOpacity>
+      </View>
+    </Container>
   );
   return (
     <View style={styles.main}>
@@ -184,37 +173,43 @@ const Main = ({ navigation }) => {
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
-      <View style={styles.heading}>
-        <TouchableOpacity onPress={() => setDeco(true)}>
-          <MaterialCommunityIcons name="balloon" style={styles.balloon} />
-        </TouchableOpacity>
-      </View>
       <View style={styles.canvas} ref={canvasRef}>
-        {selectedPlan.name === "Thanks" ? (
-          <View style={styles.thanks}>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setDeco(true)}>
-              <Motion e={app.motion} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.magic}
-              onPress={() => navigation.navigate("plan")}
-            >
-              <Text style={styles.text1}>THANK YOU</Text>
-              <Text style={styles.big}>{niceFormat(app.following)}</Text>
-              <Text style={styles.text1}>FOLLOWERS</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <Text style={styles.post}>{app.post}</Text>
-        )}
+        <Container
+          style={{
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          {selectedPlan.name === "Thanks" ? (
+            <View style={styles.thanks}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setDeco(true)}
+              >
+                <Motion e={app.motion} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.magic}
+                onPress={() => navigation.navigate("plan")}
+              >
+                <Text style={styles.text1}>THANK YOU</Text>
+                <Text style={styles.big}>{niceFormat(app.following)}</Text>
+                <Text style={styles.text1}>FOLLOWERS</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <Text style={styles.post}>{app.post}</Text>
+          )}
 
-        <View style={styles.brandMark}>
-          <Image source={logo} style={styles.logo} />
-          <Text style={styles.brandName}>TapyApp</Text>
-        </View>
+          <View style={styles.brandMark}>
+            <Image source={logo} style={styles.logo} />
+            <Text style={styles.brandName}>TapyApp</Text>
+          </View>
+        </Container>
       </View>
       <BottomSheet
         snapPoints={sheet.snap}
+        initialSnap={0}
         renderContent={renderContent}
         renderHeader={renderHeader}
         enabledInnerScrolling={false}

@@ -1,5 +1,5 @@
 const appState = {
-  background: "#8764B8",
+  background: "#131418",
   following: "0",
   post: "hello",
   motion: 6,
