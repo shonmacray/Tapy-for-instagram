@@ -29,6 +29,7 @@ const Main = ({ navigation }) => {
   const [deco, setDeco] = useState(false);
 
   const app = useSelector(state => state.appReducer);
+  const user = useSelector(state => state.userReducer);
   const selectedPlan = app.plans.find(plan => plan.selected === true);
 
   const styles = StyleSheet.create({
@@ -188,7 +189,7 @@ const Main = ({ navigation }) => {
                 onPress={() => navigation.navigate("plan")}
               >
                 <Text style={styles.text1}>THANK YOU</Text>
-                <Text style={styles.big}>{niceFormat(app.following)}</Text>
+                <Text style={styles.big}>{niceFormat(user.followingCount)}</Text>
                 <Text style={styles.text1}>FOLLOWERS</Text>
               </TouchableOpacity>
             </View>

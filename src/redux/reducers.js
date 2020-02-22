@@ -1,6 +1,5 @@
 const appState = {
   background: "#131418",
-  following: "0",
   post: "hello",
   motion: 6,
   plans: [
@@ -13,8 +12,6 @@ export const appReducer = (state = appState, action) => {
   switch (action.type) {
     case "SWITCH_COLOR":
       return { ...state, background: action.payload };
-    case "UPDATE_FOLLOWING":
-      return { ...state, following: action.payload };
     case "CHANG_DECO":
       return { ...state, motion: action.payload };
     case "SELECT_PLAN":
@@ -35,15 +32,16 @@ export const appReducer = (state = appState, action) => {
 };
 
 const userState = {
-  username: null
+  username: null,
+  followingCount: null,
 };
 
 export const userReducer = (state = userState, action) => {
   switch (action.type) {
-    case "SAVE_USERNAME":
-      return state;
+    case "SAVE_USER":
+      return {...state, ...action.payload};
     case "CLEAR_USERNAME":
-      return { ...state, username: null };
+      return { ...userState };
     default:
       return state;
   }

@@ -21,10 +21,9 @@ const Plan = ({ navigation }) => {
   const inset = useSafeArea();
   const [following, setFollowing] = useState("");
   const [post, setPost] = useState("");
-  const [user, setUser] = useState({ username: null, followingCount: "2000" });
 
   const app = useSelector(state => state.appReducer);
-  const instaUser = useSelector(state => state.userReducer);
+  const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   const selectedPlan = app.plans.find(plan => plan.selected === true);
@@ -46,19 +45,16 @@ const Plan = ({ navigation }) => {
     }
   };
   const getFollowing = async () => {
-    if (following !== "") {
-      const { count, username } = getInstaUser(follow);
+    if (following !== "" || user.username) {
+      const { count, username } = await getInstaUser(following || user.username);
+      dispatch({type: "SAVE_USER", payload: {username, followingCount: count}});
     }
   };
   useEffect(() => {
-    const { username } = instaUser;
-    if (username) {
-      setUser({ ...user, username });
-    }
+    getFollowing();
   }, []);
   const clearLocalStore = () => {
     dispatch({ type: "CLEAR_USERNAME" });
-    setUser({ ...user, username: null, followingCount: null });
   };
   return (
     <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>

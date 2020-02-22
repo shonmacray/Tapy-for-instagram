@@ -1,7 +1,7 @@
 import numbro from "numbro";
 
 export const getInstaUser = name => {
-  fetch(`https://www.instagram.com/${name}/?__a=1`)
+  return fetch(`https://www.instagram.com/${name}/?__a=1`)
     .then(response => {
       if (!response.ok) {
         alert("User not found");
@@ -20,10 +20,6 @@ export const getInstaUser = name => {
     .catch(e => {
       console.log(e);
     });
-  return {
-    count,
-    username
-  };
 };
 
 export const niceFormat = number => {

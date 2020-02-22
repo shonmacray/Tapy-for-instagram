@@ -78,7 +78,7 @@ const Decos = ({ onClose }) => {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
           flexWrap: "wrap"
         }}
       >
