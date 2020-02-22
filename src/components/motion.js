@@ -36,6 +36,38 @@ import e33 from "../assets/64/33.png";
 import e34 from "../assets/64/34.png";
 import e35 from "../assets/64/35.png";
 import e36 from "../assets/64/36.png";
+import e37 from "../assets/64/37.png";
+import e38 from "../assets/64/38.png";
+import e39 from "../assets/64/39.png";
+import e40 from "../assets/64/40.png";
+import e41 from "../assets/64/41.png";
+import e42 from "../assets/64/42.png";
+import e43 from "../assets/64/43.png";
+import e44 from "../assets/64/44.png";
+import e45 from "../assets/64/45.png";
+import e46 from "../assets/64/46.png";
+import e47 from "../assets/64/47.png";
+import e48 from "../assets/64/48.png";
+import e49 from "../assets/64/49.png";
+import e50 from "../assets/64/50.png";
+import e51 from "../assets/64/51.png";
+import e52 from "../assets/64/52.png";
+import e53 from "../assets/64/53.png";
+import e54 from "../assets/64/54.png";
+import e55 from "../assets/64/55.png";
+import e56 from "../assets/64/56.png";
+import e57 from "../assets/64/57.png";
+import e58 from "../assets/64/58.png";
+import e59 from "../assets/64/59.png";
+import e60 from "../assets/64/60.png";
+import e61 from "../assets/64/61.png";
+import e62 from "../assets/64/62.png";
+import e63 from "../assets/64/63.png";
+import e64 from "../assets/64/64.png";
+import e65 from "../assets/64/65.png";
+import e66 from "../assets/64/66.png";
+import e67 from "../assets/64/67.png";
+// import e56 from "../assets/64/56.png";
 
 const Motion = ({ e }) => {
   switch (e) {
@@ -111,6 +143,68 @@ const Motion = ({ e }) => {
       return <Image source={e35} style={styles.image} />;
     case 36:
       return <Image source={e36} style={styles.image} />;
+    case 37:
+      return <Image source={e37} style={styles.image} />;
+    case 38:
+      return <Image source={e38} style={styles.image} />;
+    case 39:
+      return <Image source={e39} style={styles.image} />;
+    case 40:
+      return <Image source={e40} style={styles.image} />;
+    case 41:
+      return <Image source={e41} style={styles.image} />;
+    case 42:
+      return <Image source={e42} style={styles.image} />;
+    case 43:
+      return <Image source={e43} style={styles.image} />;
+    case 44:
+      return <Image source={e44} style={styles.image} />;
+    case 45:
+      return <Image source={e45} style={styles.image} />;
+    case 46:
+      return <Image source={e46} style={styles.image} />;
+    case 47:
+      return <Image source={e47} style={styles.image} />;
+    case 48:
+      return <Image source={e48} style={styles.image} />;
+    case 49:
+      return <Image source={e49} style={styles.image} />;
+    case 50:
+      return <Image source={e50} style={styles.image} />;
+    case 51:
+      return <Image source={e51} style={styles.image} />;
+    case 52:
+      return <Image source={e52} style={styles.image} />;
+    case 53:
+      return <Image source={e53} style={styles.image} />;
+    case 54:
+      return <Image source={e54} style={styles.image} />;
+    case 55:
+      return <Image source={e55} style={styles.image} />;
+    case 56:
+      return <Image source={e56} style={styles.image} />;
+    case 57:
+      return <Image source={e57} style={styles.image} />;
+    case 58:
+      return <Image source={e58} style={styles.image} />;
+    case 59:
+      return <Image source={e59} style={styles.image} />;
+    case 60:
+      return <Image source={e60} style={styles.image} />;
+    case 61:
+      return <Image source={e61} style={styles.image} />;
+    case 62:
+      return <Image source={e62} style={styles.image} />;
+    case 63:
+      return <Image source={e63} style={styles.image} />;
+    case 64:
+      return <Image source={e64} style={styles.image} />;
+    case 65:
+      return <Image source={e65} style={styles.image} />;
+    case 66:
+      return <Image source={e66} style={styles.image} />;
+    case 67:
+      return <Image source={e67} style={styles.image} />;
     default:
       return <Image source={e2} style={styles.image} />;
   }
