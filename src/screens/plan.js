@@ -25,9 +25,10 @@ const Plan = ({ navigation }) => {
   const inset = useSafeArea();
   const [following, setFollowing] = useState("");
   const [post, setPost] = useState("");
-  const [user, setUser] = useState({ isReg: false, count: "", username: "" });
+  const [user, setUser] = useState({ username: null, followingCount: "2000" });
 
   const app = useSelector(state => state.appReducer);
+  const instaUser = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   const selectedPlan = app.plans.find(plan => plan.selected === true);
@@ -74,15 +75,14 @@ const Plan = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    // setUser({
-    //   ...user,
-    //   isReg: true,
-    //   count: data.followingCount,
-    //   username: data.username
-    // });
+    const { username } = instaUser;
+    if (username) {
+      setUser({ ...user, username });
+    }
   }, []);
   const clearLocalStore = () => {
-    setUser({ ...user, isReg: false, count: "", username: "" });
+    dispatch({ type: "CLEAR_USERNAME" });
+    setUser({ ...user, username: null, followingCount: null });
   };
   return (
     <ScrollView style={[styles.modal, { paddingTop: inset.top }]}>
@@ -90,7 +90,7 @@ const Plan = ({ navigation }) => {
         <View style={styles.closeContainer}>
           <View style={styles.follow}>
             <Text style={styles.insta}>Instagram</Text>
-            {user.isReg ? (
+            {user.username ? (
               <Text style={styles.username}>{user.username}</Text>
             ) : null}
           </View>
@@ -101,12 +101,18 @@ const Plan = ({ navigation }) => {
         <View>
           <View style={styles.inputContainer}>
             {selectedPlan.name === "Thanks" ? (
-              user.isReg ? (
-                <View style={styles.followerContainer}>
-                  <Text style={styles.followers}>{niceFormat(user.count)}</Text>
-                  <TouchableOpacity onPress={clearLocalStore}>
-                    <SimpleLineIcons name="reload" style={styles.icons} />
-                  </TouchableOpacity>
+              user.username !== null ? (
+                <View>
+                  {user.followingCount ? (
+                    <View style={styles.followerContainer}>
+                      <Text style={styles.followers}>
+                        {niceFormat(user.followingCount)}
+                      </Text>
+                      <TouchableOpacity onPress={clearLocalStore}>
+                        <SimpleLineIcons name="reload" style={styles.icons} />
+                      </TouchableOpacity>
+                    </View>
+                  ) : null}
                 </View>
               ) : (
                 <Write

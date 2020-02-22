@@ -35,13 +35,15 @@ export const appReducer = (state = appState, action) => {
 };
 
 const userState = {
-  username: "paypal"
+  username: null
 };
 
 export const userReducer = (state = userState, action) => {
   switch (action.type) {
     case "SAVE_USERNAME":
       return state;
+    case "CLEAR_USERNAME":
+      return { ...state, username: null };
     default:
       return state;
   }
