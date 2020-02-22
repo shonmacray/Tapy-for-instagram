@@ -159,11 +159,7 @@ const Main = ({ navigation }) => {
   return (
     <View style={styles.main}>
       <Modal visible={deco} transparent={true} animationType="slide">
-        <TouchableOpacity
-          style={styles.modal2}
-          activeOpacity={1}
-          onPress={() => setDeco(false)}
-        >
+        <Container style={styles.modal2}>
           <Decos onClose={() => setDeco(false)} />
           <TouchableOpacity
             onPress={() => setDeco(false)}
@@ -171,7 +167,7 @@ const Main = ({ navigation }) => {
           >
             <EvilIcons name="close" style={styles.times2} />
           </TouchableOpacity>
-        </TouchableOpacity>
+        </Container>
       </Modal>
       <View style={styles.canvas} ref={canvasRef}>
         <Container
