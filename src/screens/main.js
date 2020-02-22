@@ -20,10 +20,8 @@ import Backgrounds from "../components/backgrounds";
 import Decos from "../components/decos";
 import Motion from "../components/motion";
 import logo from "../../assets/part.png";
+import { niceFormat } from "../functions";
 
-const niceFormat = number => {
-  return numbro(number).format({ thousandSeparated: true });
-};
 const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();

@@ -14,12 +14,8 @@ import Write from "../components/write";
 import PlanBox from "../components/PlanBox";
 import i1 from "../assets/64/1.png";
 import i2 from "../assets/64/41.png";
-import numbro from "numbro";
 import Container from "../components/container";
-
-const niceFormat = number => {
-  return numbro(number).format({ thousandSeparated: true });
-};
+import { getInstaUser, niceFormat } from "../functions";
 
 const Plan = ({ navigation }) => {
   const inset = useSafeArea();
@@ -51,27 +47,7 @@ const Plan = ({ navigation }) => {
   };
   const getFollowing = async () => {
     if (following !== "") {
-      fetch(`https://www.instagram.com/${following}/?__a=1`)
-        .then(response => {
-          if (!response.ok) {
-            alert("User not found");
-            throw new Error("User not found");
-          }
-          return response.json();
-        })
-        .then(response => {
-          const { graphql } = response;
-
-          setUser({
-            ...user,
-            isReg: true,
-            count: graphql.user.edge_followed_by.count,
-            username: graphql.user.username
-          });
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      const { count, username } = getInstaUser(follow);
     }
   };
   useEffect(() => {
