@@ -141,7 +141,6 @@ const Main = ({ navigation }) => {
     }).then(
       async uri => {
         const canShare = await Sharing.isAvailableAsync();
-        console.log(canShare)
         if (canShare) {
           await Sharing.shareAsync(uri);
         }
