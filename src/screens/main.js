@@ -25,8 +25,9 @@ import Container from "../components/container";
 const Main = ({ navigation }) => {
   const canvasRef = useRef(null);
   const area = useSafeArea();
-  const [sheet, setSheet] = useState({ id: 1, snap: ["8%", "17%"] });
+  const bottomSheetRef = useRef(null);
   const [deco, setDeco] = useState(false);
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
   const app = useSelector(state => state.appReducer);
   const user = useSelector(state => state.userReducer);
@@ -114,6 +115,7 @@ const Main = ({ navigation }) => {
       alignItems: "center"
     }
   });
+
   useEffect(() => {
     navigation.navigate("plan");
   }, []);
@@ -131,6 +133,18 @@ const Main = ({ navigation }) => {
       error => console.error("Oops, snapshot failed", error)
     );
   };
+
+  const setBottomSheet = () => {
+    snapTo(bottomSheetOpen ? 0 : 1);
+    setBottomSheetOpen(!bottomSheetOpen);
+  }
+
+  const snapTo = (point) => {
+    setTimeout(() => {
+      bottomSheetRef.current.snapTo(point);
+    }, 50)
+  }
+
   const renderContent = () => <Backgrounds />;
 
   const renderHeader = () => (
@@ -142,7 +156,12 @@ const Main = ({ navigation }) => {
             style={styles.headerIcons}
           />
         </TouchableOpacity>
-
+        <TouchableOpacity onPress={() => setBottomSheet()}>
+          <MaterialCommunityIcons
+            name="chevron-up"
+            style={styles.headerIcons}
+          />
+        </TouchableOpacity>
         <TouchableOpacity onPress={processPreview}>
           {Platform.OS === "android" ? (
             <MaterialCommunityIcons
@@ -179,7 +198,7 @@ const Main = ({ navigation }) => {
           {selectedPlan.name === "Thanks" ? (
             <View style={styles.thanks}>
               <TouchableOpacity
-                activeOpacity={0.8}
+                activeOpacity={0.6}
                 onPress={() => setDeco(true)}
               >
                 <Motion e={app.motion} />
@@ -194,7 +213,9 @@ const Main = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <Text style={styles.post}>{app.post}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("plan")}>
+              <Text style={styles.post}>{app.post}</Text>
+            </TouchableOpacity>
           )}
 
           <View style={styles.brandMark}>
@@ -204,11 +225,18 @@ const Main = ({ navigation }) => {
         </Container>
       </View>
       <BottomSheet
-        snapPoints={sheet.snap}
+        snapPoints={["8%", "17%"]}
         initialSnap={0}
         renderContent={renderContent}
         renderHeader={renderHeader}
         enabledInnerScrolling={false}
+        ref={bottomSheetRef}
+        onCloseEnd={() => {
+          setBottomSheetOpen(false);
+        }}
+        onOpenEnd={() => {
+          setBottomSheetOpen(true);
+        }}
       />
     </View>
   );

@@ -19,10 +19,12 @@ import { getInstaUser, niceFormat } from "../functions";
 
 const Plan = ({ navigation }) => {
   const inset = useSafeArea();
-  const [following, setFollowing] = useState("");
-  const [post, setPost] = useState("");
-
   const app = useSelector(state => state.appReducer);
+  
+  const [following, setFollowing] = useState("");
+  const [post, setPost] = useState(app.post);
+  const [loadingUser, setLoadingUser] = useState(false);
+
   const user = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
@@ -30,24 +32,31 @@ const Plan = ({ navigation }) => {
 
   const onUpdate = () => {
     if (selectedPlan.name === "Thanks") {
-      if (user.username !== "" && user.count !== "") {
-        dispatch({
-          type: "UPDATE_FOLLOWING",
-          payload: user.count
-        });
+      if (user.username && user.followingCount) {
         navigation.goBack();
+      } else {
+        alert('Enter your Instagram username and press Set to continue.');
       }
     } else {
       if (post.trim() !== "") {
         dispatch({ type: "SET_POST", payload: post.trim() });
         navigation.goBack();
+      } else {
+        alert('Write something to continue.');
       }
     }
   };
   const getFollowing = async () => {
     if (following !== "" || user.username) {
-      const { count, username } = await getInstaUser(following || user.username);
-      dispatch({type: "SAVE_USER", payload: {username, followingCount: count}});
+      setLoadingUser(true);
+      try{
+        const { count, username } = await getInstaUser(following || user.username);
+        dispatch({type: "SAVE_USER", payload: {username, followingCount: count}});
+      } catch(e) {
+        alert('Failed to get data from Instagram');
+      } finally {
+        setLoadingUser(false);
+      }
     }
   };
   useEffect(() => {
@@ -95,6 +104,7 @@ const Plan = ({ navigation }) => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onPress={getFollowing}
+                  loading={loadingUser}
                 />
               )
             ) : (
@@ -127,7 +137,7 @@ const Plan = ({ navigation }) => {
             ))}
           </View>
           <TouchableOpacity style={styles.btn} onPress={onUpdate}>
-            <Text style={styles.update}>Set</Text>
+            <Text style={styles.update}>Done</Text>
           </TouchableOpacity>
         </View>
       </Container>

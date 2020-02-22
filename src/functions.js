@@ -17,11 +17,12 @@ export const getInstaUser = name => {
         username: graphql.user.username
       };
     })
-    .catch(e => {
-      console.log(e);
-    });
 };
 
 export const niceFormat = number => {
-  return numbro(number).format({ thousandSeparated: true });
+  if(number) {
+    return numbro(number).format({ thousandSeparated: true });
+  } else {
+    return 0;
+  }
 };

@@ -4,10 +4,11 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
-const Write = ({ textBefore, onPress, ...rest }) => {
+const Write = ({ textBefore, loading, onPress, ...rest }) => {
   const styles = StyleSheet.create({
     writeContainer: {
       flexDirection: "row",
@@ -41,8 +42,14 @@ const Write = ({ textBefore, onPress, ...rest }) => {
       ) : null}
       <TextInput autoFocus maxLength={100} style={styles.write} {...rest} />
       {textBefore ? (
-        <TouchableOpacity style={styles.btn} onPress={onPress}>
-          <Text style={styles.btnText}>Set</Text>
+        <TouchableOpacity style={styles.btn} onPress={(...args) => {
+          if(!loading) {
+            onPress(args)
+          }
+        }}>
+          {
+            loading ? <ActivityIndicator color="white" /> : <Text style={styles.btnText}>Set</Text>
+          }
         </TouchableOpacity>
       ) : null}
     </View>
